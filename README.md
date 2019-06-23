@@ -1,3 +1,3 @@
-# Destroyer Of Worlds
+# Tilted Core
 
-This library is yet another attempt to get a decent networking library designed with games in mind.
+This is the core library used by all C++ projects by Tilted Phoques.
