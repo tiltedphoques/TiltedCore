@@ -1,5 +1,7 @@
 require("premake", ">=5.0.0-alpha10")
 
+include "module.lua"
+
 workspace ("Tilted Core")
 
     ------------------------------------------------------------------
@@ -77,26 +79,5 @@ workspace ("Tilted Core")
                 targetdir ("bin/x64")
 		
     group ("Libraries")   
-        project ("Core")
-            kind ("StaticLib")
-            language ("C++")
-
-            includedirs
-            {
-                "../Code/core/include/",
-            }
-
-            files
-            {
-                "../Code/core/include/**.h",
-                "../Code/core/src/**.cpp",
-            }
-
-            filter { "architecture:*86" }
-                libdirs { "lib/x32" }
-                targetdir ("lib/x32")
-
-            filter { "architecture:*64" }
-                libdirs { "lib/x64" }
-                targetdir ("lib/x64")
+        CreateCoreProject("..")
     
