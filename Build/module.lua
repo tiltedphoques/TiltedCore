@@ -13,14 +13,4 @@ function CreateCoreProject(basePath)
             basePath .. "/Code/core/include/**.h",
             basePath .. "/Code/core/src/**.cpp",
         }
-
-        filter { "architecture:*86" }
-            libdirs { "lib/x32" }
-            targetdir ("lib/x32")
-
-        filter { "architecture:*64" }
-            libdirs { "lib/x64" }
-            targetdir ("lib/x64")
-            
-        filter {}
 end

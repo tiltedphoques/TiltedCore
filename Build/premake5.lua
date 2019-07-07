@@ -45,6 +45,16 @@ workspace ("Tilted Core")
         defines { "DEBUG" }
         optimize ("Off")
         symbols ( "On" )
+        
+    filter { "architecture:*86" }
+        libdirs { "lib/x32" }
+        targetdir ("lib/x32")
+
+    filter { "architecture:*64" }
+        libdirs { "lib/x64" }
+        targetdir ("lib/x64")
+        
+    filter {}
 
     group ("Applications")
         project ("Tests")
@@ -68,15 +78,6 @@ workspace ("Tilted Core")
             {
                 "Core"
             }
-          
-			
-            filter { "architecture:*86" }
-                libdirs { "lib/x32" }
-                targetdir ("bin/x32")
-
-            filter { "architecture:*64" }
-                libdirs { "lib/x64" }
-                targetdir ("bin/x64")
 		
     group ("Libraries")   
         CreateCoreProject("..")

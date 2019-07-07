@@ -16,3 +16,13 @@
 #define TP_PLATFORM_64 0
 #define TP_PLATFORM_32 1
 #endif
+
+#ifdef NDEBUG
+#define TP_RELEASE 1
+#define TP_DEBUG 0
+#else
+#define TP_RELEASE 0
+#define TP_DEBUG 1
+#endif
+
+#define TP_UNUSED(x) (void)x;
