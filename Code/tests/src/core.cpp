@@ -7,6 +7,7 @@
 #include "ScratchAllocator.h"
 #include "StackAllocator.h"
 #include "TrackAllocator.h"
+#include "Hash.h"
 
 #include <string>
 #include <thread>
@@ -441,4 +442,12 @@ TEST_CASE("Buffers", "[core.buffer]")
     }
 
     REQUIRE(tracker.GetUsedMemory() == 0);
+}
+
+TEST_CASE("Hash")
+{
+    GIVEN("A test vector")
+    {
+        REQUIRE(FHash::Crc64((const uint8_t*)"hello", 5) == 0xec5388479a7c913fULL);
+    }
 }
