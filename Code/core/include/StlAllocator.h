@@ -14,7 +14,7 @@ struct StlAllocator
         m_pAllocator = Allocator::Get();
     }
 
-    template <class U> 
+    template <class U>
     constexpr StlAllocator(const StlAllocator<U>& acRhs) noexcept 
     {
         m_pAllocator = acRhs.m_pAllocator;
@@ -22,10 +22,10 @@ struct StlAllocator
 
     T* allocate(std::size_t aSize) 
     {
-        if (n > std::size_t(-1) / sizeof(T)) 
+        if (aSize > std::size_t(-1) / sizeof(T)) 
             throw std::bad_alloc();
 
-        if (auto p = static_cast<T*>(m_pAllocator->Allocate(n * sizeof(T)))) 
+        if (auto p = static_cast<T*>(m_pAllocator->Allocate(aSize * sizeof(T)))) 
             return p;
 
         throw std::bad_alloc();
@@ -35,7 +35,6 @@ struct StlAllocator
         m_pAllocator->Free(p);
     }
 
-private:
 
     Allocator* m_pAllocator;
 };

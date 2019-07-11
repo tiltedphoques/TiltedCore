@@ -7,12 +7,14 @@
 #include "ScratchAllocator.h"
 #include "StackAllocator.h"
 #include "TrackAllocator.h"
+#include "StlAllocator.h"
 #include "Hash.h"
 
 #include <string>
 #include <thread>
 #include <future>
 #include <cstring>
+#include <vector>
 
 TEST_CASE("Outcome saves the result and errors", "[core.outcome]")
 {
@@ -223,6 +225,43 @@ TEST_CASE("Allocating memory on the stack", "[core.allocator.stack]")
         REQUIRE(allocator.Allocate(1000) == nullptr);
     }
 
+}
+
+TEST_CASE("Using standard allocator", "[core.allocator.std]")
+{
+    TrackAllocator<StandardAllocator> tracker;
+    ScopedAllocator _{ &tracker };
+
+    {
+        std::vector<int, StlAllocator<int>> test;
+        test.push_back(42);
+
+        REQUIRE(test[0] == 42);
+    }
+
+    {
+        std::vector<int, StlAllocator<int>> test;
+
+        {
+            TrackAllocator<StandardAllocator> tracker2;
+            ScopedAllocator __{ &tracker2 };
+
+            {
+                std::vector<int, StlAllocator<int>> tmp;
+                tmp.push_back(42);
+
+                REQUIRE(tracker2.GetUsedMemory() > 0);
+
+                test = tmp;
+            }
+
+            REQUIRE(tracker2.GetUsedMemory() == 0);
+        }
+
+        REQUIRE(test[0] == 42);
+    }
+
+    REQUIRE(tracker.GetUsedMemory() == 0);
 }
 
 TEST_CASE("Buffers", "[core.buffer]")
