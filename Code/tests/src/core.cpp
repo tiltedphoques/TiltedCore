@@ -9,6 +9,7 @@
 #include "TrackAllocator.h"
 #include "StlAllocator.h"
 #include "Hash.h"
+#include "Stl.h"
 
 #include <string>
 #include <thread>
@@ -259,6 +260,10 @@ TEST_CASE("Using standard allocator", "[core.allocator.std]")
         }
 
         REQUIRE(test[0] == 42);
+    }
+
+    {
+        auto tmp = MakeUnique<int>(42);
     }
 
     REQUIRE(tracker.GetUsedMemory() == 0);
