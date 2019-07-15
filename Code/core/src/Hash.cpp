@@ -134,7 +134,7 @@ static const uint64_t crc64_tab[256] = {
 namespace FHash
 {
     // ECMA-182 
-    uint64_t Crc64(const unsigned char* acpData, size_t aSize)
+    uint64_t Crc64(const unsigned char* acpData, std::size_t aSize)
     {
         uint64_t crc = ~(0ULL);
 

@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <malloc.h>
 
-void* StandardAllocator::Allocate(size_t aSize)
+void* StandardAllocator::Allocate(const size_t aSize)
 {
     return malloc(aSize);
 }

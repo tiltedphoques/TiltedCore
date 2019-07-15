@@ -14,7 +14,7 @@ Buffer::Buffer(size_t aSize)
     , m_size(aSize)
 {
     if(m_size > 0)
-        m_pData = (uint8_t*)GetAllocator()->Allocate(m_size);
+        m_pData = static_cast<uint8_t*>(GetAllocator()->Allocate(m_size));
 }
 
 Buffer::Buffer(const Buffer& acBuffer)
@@ -64,7 +64,7 @@ Buffer& Buffer::operator=(Buffer&& aBuffer) noexcept
     std::swap(aBuffer.m_size, m_size);
 
     // Swap allocators
-    auto pAllocator = GetAllocator();
+    const auto pAllocator = GetAllocator();
     SetAllocator(aBuffer.GetAllocator());
     aBuffer.SetAllocator(pAllocator);
 
@@ -127,7 +127,7 @@ size_t Buffer::Cursor::GetBytePosition() const
 }
 
 Buffer::Reader::Reader(Buffer* apBuffer)
-    : Buffer::Cursor(apBuffer)
+    : Cursor(apBuffer)
 {
 
 }
@@ -137,10 +137,10 @@ bool Buffer::Reader::ReadBits(uint64_t& aDestination, size_t aCount)
     aDestination = 0;
 
     // Number of bits to read in the current byte
-    auto bitIndex = m_bitPosition & 0x7;
+    const auto bitIndex = m_bitPosition & 0x7;
     size_t bitsToRead = 0;
 
-    auto countOffset = aCount + bitIndex;
+    const auto countOffset = aCount + bitIndex;
     // Compute how many bytes we will end up reading
     auto bytesToRead = ((countOffset & ~0x7) + ((countOffset & 0x7) != 0 ? 8 : 0)) >> 3;
     if (bytesToRead + GetBytePosition() > m_pBuffer->GetSize())
@@ -164,10 +164,8 @@ bool Buffer::Reader::ReadBits(uint64_t& aDestination, size_t aCount)
         pLocation++;
         bytesToRead--;
     }
-    else
-        bitIndex = 0;
 
-    std::copy(pLocation, pLocation + bytesToRead, (uint8_t*)& aDestination);
+    std::copy(pLocation, pLocation + bytesToRead, reinterpret_cast<uint8_t*>(& aDestination));
     aDestination <<= bitsToRead;
     aDestination |= endBits;
     aDestination &= ((uint64_t(1) << aCount) - 1);
@@ -195,22 +193,17 @@ bool Buffer::Reader::ReadBytes(uint8_t* apDestination, size_t aCount)
 }
 
 Buffer::Writer::Writer(Buffer* apBuffer)
-    : Buffer::Cursor(apBuffer)
+    : Cursor(apBuffer)
 {
 
-}
-
-Buffer::Writer::~Writer()
-{
 }
 
 bool Buffer::Writer::WriteBits(uint64_t aData, size_t aCount)
 {
     // Number of bits to write in the current byte
-    auto bitIndex = m_bitPosition & 0x7;
-    size_t bitsToWrite = 0;
+    const auto bitIndex = m_bitPosition & 0x7;
 
-    auto countOffset = aCount + bitIndex;
+    const auto countOffset = aCount + bitIndex;
     // Compute how many bytes we will end up writing
     auto bytesToWrite = ((countOffset & ~0x7) + ((countOffset & 0x7) != 0 ? 8 : 0)) >> 3;
 
@@ -223,18 +216,18 @@ bool Buffer::Writer::WriteBits(uint64_t aData, size_t aCount)
 
     if (bitIndex != 0)
     {
-        bitsToWrite = 8 - bitIndex;
+        auto bitsToWrite = 8 - bitIndex;
 
         // If we are requesting less bits that what is available
         bitsToWrite = bitsToWrite > aCount ? aCount : bitsToWrite;
 
         // Select the data we want to keep
         auto workByte = *pLocation;
-        auto workByteMask = ((1 << bitIndex) - 1);
+        const auto workByteMask = ((1 << bitIndex) - 1);
         workByte &= workByteMask;
 
         // Write the part we want
-        *pLocation = ((uint8_t)(aData & 0xFF) & ((1 << bitsToWrite) - 1)) << bitIndex;
+        *pLocation = (static_cast<uint8_t>(aData & 0xFF) & ((1 << bitsToWrite) - 1)) << bitIndex;
         *pLocation |= workByte;
 
         pLocation++;
@@ -242,10 +235,8 @@ bool Buffer::Writer::WriteBits(uint64_t aData, size_t aCount)
 
         aData >>= bitsToWrite;
     }
-    else
-        bitIndex = 0;
 
-    uint8_t* pDirectAccess = (uint8_t*)&aData;
+    const auto pDirectAccess = reinterpret_cast<uint8_t*>(&aData);
     std::copy(pDirectAccess, pDirectAccess + bytesToWrite, pLocation);
 
     m_bitPosition += aCount;

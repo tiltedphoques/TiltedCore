@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 namespace FHash
 {
-    uint64_t Crc64(const unsigned char* acpData, size_t aLength);
+    uint64_t Crc64(const unsigned char* acpData, std::size_t aLength);
 }

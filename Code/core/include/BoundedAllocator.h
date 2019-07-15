@@ -8,8 +8,8 @@ public:
 
     BoundedAllocator(size_t aMaximumAllocationSize);
 
-    virtual void* Allocate(size_t aSize) override;
-    virtual void Free(void* apData) override;
+    void* Allocate(size_t aSize) override;
+    void Free(void* apData) override;
 
 private:
 

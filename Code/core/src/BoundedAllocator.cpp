@@ -1,7 +1,7 @@
 #include "BoundedAllocator.h"
 
 
-BoundedAllocator::BoundedAllocator(size_t aMaximumAllocationSize)
+BoundedAllocator::BoundedAllocator(const size_t aMaximumAllocationSize)
     : m_availableMemory{aMaximumAllocationSize}
 {
 

@@ -8,7 +8,7 @@ class Buffer : public AllocatorCompatible
 public:
 
     Buffer();
-    Buffer(size_t aSize);
+    explicit Buffer(size_t aSize);
     Buffer(const Buffer& acBuffer);
     Buffer(Buffer&& aBuffer) noexcept;
     virtual ~Buffer();
@@ -19,22 +19,22 @@ public:
     Buffer& operator=(const Buffer& acBuffer);
     Buffer& operator=(Buffer&& aBuffer) noexcept;
 
-    size_t GetSize() const;
+    [[nodiscard]] size_t GetSize() const;
 
-    const uint8_t* GetData() const;
-    uint8_t* GetWriteData();
+    [[nodiscard]] const uint8_t* GetData() const;
+    [[nodiscard]] uint8_t* GetWriteData();
 
     struct Cursor
     {
-        Cursor(Buffer* apBuffer);
+        explicit Cursor(Buffer* apBuffer);
 
         void Reset();
         bool Eof() const;
         void Advance(size_t aByteCount);
         void Reverse(size_t aByteCount);
 
-        size_t GetBytePosition() const;
-        size_t GetBitPosition() const;
+        [[nodiscard]] size_t GetBytePosition() const;
+        [[nodiscard]] size_t GetBitPosition() const;
 
     protected:
 
@@ -42,18 +42,17 @@ public:
         Buffer* m_pBuffer;
     };
 
-    struct Reader : public Cursor
+    struct Reader : Cursor
     {
-        Reader(Buffer* apBuffer);
+        explicit Reader(Buffer* apBuffer);
 
         bool ReadBits(uint64_t& aDestination, size_t aCount);
         bool ReadBytes(uint8_t* apDestination, size_t aCount);
     };
 
-    struct Writer : public Cursor
+    struct Writer : Cursor
     {
-        Writer(Buffer* apBuffer);
-        ~Writer();
+        explicit Writer(Buffer* apBuffer);
 
         bool WriteBits(uint64_t aData, size_t aCount);
         bool WriteBytes(const uint8_t* apSource, size_t aCount);

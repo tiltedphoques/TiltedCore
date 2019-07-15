@@ -6,7 +6,7 @@ class StandardAllocator : public Allocator
 {
 public:
 
-    virtual void* Allocate(size_t aSize) override;
-    virtual void Free(void* apData) override;
-    virtual size_t Size(void* apData) override;
+    void* Allocate(size_t aSize) override;
+    void Free(void* apData) override;
+    size_t Size(void* apData) override;
 };

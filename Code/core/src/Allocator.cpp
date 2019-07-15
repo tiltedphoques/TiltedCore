@@ -19,7 +19,7 @@ Allocator* Allocator::Pop()
 {
     if (s_currentAllocator >= 0)
     {
-        auto pAllocator = s_allocatorStack[s_currentAllocator];
+        const auto pAllocator = s_allocatorStack[s_currentAllocator];
         s_currentAllocator--;
 
         return pAllocator;
