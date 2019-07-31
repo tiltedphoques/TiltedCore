@@ -32,7 +32,7 @@ workspace ("Tilted Core")
     filter { "action:vs*"}
         buildoptions { "/wd4512", "/wd4996", "/wd4018", "/Zm500" }
         
-    filter { "action:gmake2", "language:C++" }
+    filter { "action:gmake*", "language:C++" }
         buildoptions { "-g -fpermissive" }
         linkoptions ("-lm -lpthread -pthread -Wl,--no-as-needed -lrt -g -fPIC")
             
