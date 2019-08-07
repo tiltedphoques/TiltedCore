@@ -19,7 +19,7 @@ class Allocator
 {
 public:
 
-    virtual ~Allocator() {}
+    virtual ~Allocator() = default;
     virtual void* Allocate(size_t aSize) = 0;
     virtual void Free(void* apData) = 0;
     virtual size_t Size(void* apData) = 0;
@@ -29,7 +29,7 @@ public:
     {
         static_assert(alignof(T) <= alignof(details::default_align_t));
 
-        auto pData = (T*)Allocate(sizeof(T));
+        auto pData = static_cast<T*>(Allocate(sizeof(T)));
         if (pData)
         {
             return new (pData) T();
@@ -43,7 +43,7 @@ public:
     {
         static_assert(alignof(T) <= alignof(details::default_align_t));
 
-        auto pData = (T*)Allocate(sizeof(T));
+        auto pData = static_cast<T*>(Allocate(sizeof(T)));
         if (pData)
         {
             return new (pData) T(std::forward<Args...>(args...));
@@ -91,8 +91,13 @@ private:
 
 struct ScopedAllocator
 {
-    ScopedAllocator(Allocator* apAllocator);
+    explicit ScopedAllocator(Allocator* apAllocator);
     ~ScopedAllocator();
+
+    ScopedAllocator(const ScopedAllocator&) = delete;
+    ScopedAllocator(ScopedAllocator&&) = delete;
+    ScopedAllocator& operator=(const ScopedAllocator&) = delete;
+    ScopedAllocator& operator=(ScopedAllocator&&) = delete;
 
 private:
     Allocator* m_pAllocator;

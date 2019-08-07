@@ -9,7 +9,7 @@ Buffer::Buffer()
 
 }
 
-Buffer::Buffer(size_t aSize)
+Buffer::Buffer(const size_t aSize)
     : m_pData(nullptr)
     , m_size(aSize)
 {
@@ -40,12 +40,12 @@ Buffer::~Buffer()
     GetAllocator()->Free(m_pData);
 }
 
-uint8_t Buffer::operator[](size_t aIndex) const
+uint8_t Buffer::operator[](const size_t aIndex) const
 {
     return m_pData[aIndex];
 }
 
-uint8_t& Buffer::operator[](size_t aIndex)
+uint8_t& Buffer::operator[](const size_t aIndex)
 {
     return m_pData[aIndex];
 }

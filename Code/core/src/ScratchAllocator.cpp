@@ -3,8 +3,9 @@
 #include <memory>
 
 
-ScratchAllocator::ScratchAllocator(size_t aSize)
+ScratchAllocator::ScratchAllocator(const size_t aSize)
     : m_size(aSize)
+    , m_baseSize(aSize)
 {
     m_pBaseData = m_pData = GetDefault()->Allocate(aSize);
 
@@ -19,7 +20,7 @@ ScratchAllocator::~ScratchAllocator()
     GetDefault()->Free(m_pBaseData);
 }
 
-void* ScratchAllocator::Allocate(size_t aSize)
+void* ScratchAllocator::Allocate(const size_t aSize)
 {
     if (std::align(alignof(std::max_align_t), aSize, m_pData, m_size))
     {
@@ -41,4 +42,10 @@ size_t ScratchAllocator::Size(void* apData)
 {
     TP_UNUSED(apData);
     return m_size;
+}
+
+void ScratchAllocator::Reset()
+{
+    m_size = m_baseSize;
+    m_pData = m_pBaseData;
 }

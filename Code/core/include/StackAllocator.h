@@ -11,9 +11,9 @@ public:
     StackAllocator();
     virtual ~StackAllocator();
 
-    virtual void* Allocate(size_t aSize) override;
-    virtual void Free(void* apData) override;
-    virtual size_t Size(void* apData) override;
+    void* Allocate(size_t aSize) override;
+    void Free(void* apData) override;
+    size_t Size(void* apData) override;
 
 private:
 
@@ -26,21 +26,19 @@ template <size_t Bytes>
 StackAllocator<Bytes>::StackAllocator()
     : m_size(Bytes)
 {
-    m_pCursor = (void*)m_data;
+    m_pCursor = static_cast<void*>(m_data);
 }
 
 template <size_t Bytes>
-StackAllocator<Bytes>::~StackAllocator()
-{
-}
+StackAllocator<Bytes>::~StackAllocator() = default;
 
 template <size_t Bytes>
-void* StackAllocator<Bytes>::Allocate(size_t aSize)
+void* StackAllocator<Bytes>::Allocate(const size_t aSize)
 {
     if (std::align(alignof(std::max_align_t), aSize, m_pCursor, m_size))
     {
-        void* pResult = m_pCursor;
-        m_pCursor = (char*)m_pCursor + aSize;
+        auto pResult = m_pCursor;
+        m_pCursor = static_cast<char*>(m_pCursor) + aSize;
         m_size -= aSize;
         return pResult;
     }

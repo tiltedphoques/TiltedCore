@@ -136,12 +136,12 @@ namespace FHash
     // ECMA-182 
     uint64_t Crc64(const unsigned char* acpData, std::size_t aSize)
     {
-        uint64_t crc = ~(0ULL);
+        auto crc = ~(0ULL);
 
         for (size_t j = 0; j < aSize; ++j)
         {
-            uint8_t index = acpData[j] ^ (crc >> 56);
-            auto lookup = crc64_tab[index];
+            const uint8_t index = acpData[j] ^ (crc >> 56);
+            const auto lookup = crc64_tab[index];
             crc <<= 8;
             crc ^= lookup;
         }

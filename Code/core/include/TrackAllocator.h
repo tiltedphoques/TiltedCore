@@ -9,7 +9,7 @@ public:
 
     virtual ~TrackAllocator() {}
 
-    virtual void* Allocate(size_t aSize) override
+    void* Allocate(size_t aSize) override
     {
         void* pData = m_allocator.Allocate(aSize);
 
@@ -19,12 +19,12 @@ public:
         return pData;
     }
 
-    virtual void Free(void* apData) override
+    void Free(void* apData) override
     {
         m_usedMemory -= m_allocator.Size(apData);
     }
 
-    virtual size_t Size(void* apData) override
+    size_t Size(void* apData) override
     {
         return m_allocator.Size(apData);
     }
