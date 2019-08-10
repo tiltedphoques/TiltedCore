@@ -55,7 +55,7 @@ Buffer& Buffer::operator=(const Buffer& acBuffer)
     this->~Buffer();
     new (this) Buffer(acBuffer);
 
-    return *this;
+    return *std::launder(this);
 }
 
 Buffer& Buffer::operator=(Buffer&& aBuffer) noexcept
