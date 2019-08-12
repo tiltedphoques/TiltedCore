@@ -14,11 +14,11 @@ using Vector = std::vector<T, StlAllocator<T>>;
 template<class T>
 using List = std::list<T, StlAllocator<T>>;
 
-template<class T>
-using Map = std::unordered_map<T, StlAllocator<T>>;
+template<class T, class U>
+using Map = std::unordered_map<T, U, std::hash<T>, std::equal_to<T>, StlAllocator<std::pair<const T, U>>>;
 
 template<class T>
-using Set = std::unordered_set<T, StlAllocator<T>>;
+using Set = std::unordered_set<T, std::hash<T>, std::equal_to<T>, StlAllocator<T>>;
 
 template<class T>
 using Queue = std::queue<T, StlAllocator<T>>;
