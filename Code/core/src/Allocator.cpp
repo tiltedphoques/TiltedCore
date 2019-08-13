@@ -1,5 +1,6 @@
 #include "Allocator.h"
 #include "StandardAllocator.h"
+#include <cassert>
 
 
 thread_local Allocator* Allocator::s_allocatorStack[kMaxAllocatorCount];
@@ -8,24 +9,25 @@ thread_local int Allocator::s_currentAllocator{ -1 };
 
 void Allocator::Push(Allocator* apAllocator)
 {
-    if (s_currentAllocator + 1 < kMaxAllocatorCount)
-    {
-        s_currentAllocator++;
-        s_allocatorStack[s_currentAllocator] = apAllocator;
-    }
+    assert(s_currentAllocator + 1 < kMaxAllocatorCount);
+
+    s_currentAllocator++;
+    s_allocatorStack[s_currentAllocator] = apAllocator;
+}
+
+void Allocator::Push(Allocator& aAllocator)
+{
+    Push(&aAllocator);
 }
 
 Allocator* Allocator::Pop()
 {
-    if (s_currentAllocator >= 0)
-    {
-        const auto pAllocator = s_allocatorStack[s_currentAllocator];
-        s_currentAllocator--;
+    assert(s_currentAllocator >= 0);
 
-        return pAllocator;
-    }
+    const auto pAllocator = s_allocatorStack[s_currentAllocator];
+    s_currentAllocator--;
 
-    return nullptr;
+    return pAllocator;
 }
 
 Allocator* Allocator::Get()
@@ -48,6 +50,11 @@ ScopedAllocator::ScopedAllocator(Allocator* apAllocator)
     : m_pAllocator(apAllocator)
 {
     Allocator::Push(m_pAllocator);
+}
+
+ScopedAllocator::ScopedAllocator(Allocator& aAllocator)
+    : ScopedAllocator(&aAllocator)
+{
 }
 
 ScopedAllocator::~ScopedAllocator()

@@ -63,6 +63,7 @@ public:
     }
 
     static void Push(Allocator* apAllocator);
+    static void Push(Allocator& aAllocator);
     static Allocator* Pop();
     static Allocator* Get();
     static Allocator* GetDefault();
@@ -92,6 +93,7 @@ private:
 struct ScopedAllocator
 {
     explicit ScopedAllocator(Allocator* apAllocator);
+    explicit ScopedAllocator(Allocator& aAllocator);
     ~ScopedAllocator();
 
     ScopedAllocator(const ScopedAllocator&) = delete;
