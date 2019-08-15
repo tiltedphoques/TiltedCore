@@ -118,9 +118,9 @@ template<class T, class... Args>
 T* New(Args... args)
 {
     if constexpr (details::has_allocator<T>)
-        return Allocator::Get()->New<T>(std::forward<Args...>(args...));
+        return Allocator::Get()->New<T>(std::forward<Args>(args)...);
     else
-        return Allocator::GetDefault()->New<T>(std::forward<Args...>(args...));
+        return Allocator::GetDefault()->New<T>(std::forward<Args>(args)...);
 }
 
 template<class T>
