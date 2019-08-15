@@ -46,7 +46,7 @@ public:
         auto pData = static_cast<T*>(Allocate(sizeof(T)));
         if (pData)
         {
-            return new (pData) T(std::forward<Args...>(args...));
+            return new (pData) T(std::forward<Args>(args)...);
         }
 
         return nullptr;
@@ -79,14 +79,16 @@ private:
     static thread_local int s_currentAllocator;
 };
 
+#define TP_ALLOCATOR \
+    void SetAllocator(Allocator* apAllocator) { m_pAllocator = apAllocator; }   \
+    Allocator* GetAllocator() { return m_pAllocator; }                          \
+private:                                                                        \
+    Allocator* m_pAllocator{ Allocator::Get() };                                \
+public:                                                                         
+
 struct AllocatorCompatible
 {
-    void SetAllocator(Allocator* apAllocator) { m_pAllocator = apAllocator; }
-    Allocator* GetAllocator() { return m_pAllocator; }
-
-private:
-
-    Allocator* m_pAllocator{ Allocator::Get() };
+    TP_ALLOCATOR
 };
 
 
