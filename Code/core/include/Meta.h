@@ -52,3 +52,9 @@ void hash_combine(size_t& aSeed, const T& aValue)
 {
     aSeed ^= std::hash<T>()(aValue) + 0x9e3779b9 + (aSeed << 6) + (aSeed >> 2);
 }
+
+#define TP_NOCOPYMOVE(className) \
+    className(className&&) = delete; \
+    className(const className&) = delete; \
+    className& operator=(const className&) = delete; \
+    className& operator=(className&&) = delete;
