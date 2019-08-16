@@ -13,4 +13,5 @@ function CreateCoreProject(basePath)
             basePath .. "/Code/core/include/**.h",
             basePath .. "/Code/core/src/**.cpp",
         }
+        
 end

@@ -1,3 +1,0 @@
-[submodule "ThirdParty/cryptopp"]
-	path = ThirdParty/cryptopp
-	url = https://github.com/weidai11/cryptopp
