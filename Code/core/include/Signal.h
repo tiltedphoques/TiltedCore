@@ -112,6 +112,11 @@ namespace details
             return collector.result();
         }
 
+        CollectorResult operator()(Args... args) const
+        {
+            Emit(std::forward<Args>(args)...);
+        }
+
         [[nodiscard]] std::size_t Count() const
         {
             return callback_list_.size();
