@@ -1,6 +1,6 @@
 #pragma once
 
-#include "StlAllocator.h"
+#include <StlAllocator.h>
 
 #include <unordered_set>
 #include <unordered_map>
@@ -26,8 +26,17 @@ using Queue = std::queue<T, StlAllocator<T>>;
 template<class T>
 using UniquePtr = std::unique_ptr<T, decltype(&Delete<T>)>;
 
+template<class T>
+using SharedPtr = std::shared_ptr<T>;
+
 template<typename T, typename... Args>
 auto MakeUnique(Args&& ... args)
 {
     return UniquePtr<T>(New<T>(std::forward<Args>(args)...), &Delete<T>);
+}
+
+template<typename T, typename... Args>
+auto MakeShared(Args&&... args)
+{
+    return std::allocate_shared<T>(StlAllocator<T>(), std::forward<Args>(args)...);
 }
