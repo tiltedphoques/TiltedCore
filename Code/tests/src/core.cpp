@@ -10,12 +10,13 @@
 #include "StlAllocator.h"
 #include "Hash.h"
 #include "Stl.h"
+#include "TaskQueue.h"
 
 #include <string>
-#include <thread>
 #include <future>
+#include <thread>
 #include <cstring>
-#include <vector>
+#include <iostream>
 
 TEST_CASE("Outcome saves the result and errors", "[core.outcome]")
 {
@@ -493,5 +494,145 @@ TEST_CASE("Hash")
     GIVEN("A test vector")
     {
         REQUIRE(FHash::Crc64((const uint8_t*)"hello", 5) == 0xec5388479a7c913fULL);
+    }
+}
+
+TEST_CASE("Task Queue")
+{
+    GIVEN("A task queue")
+    {
+        TaskQueue tasks;
+
+        WHEN("Adding a single task and poping it")
+        {
+            auto callCount = 0;
+
+            tasks.Add([&callCount]() { ++callCount; });
+
+            std::function<void()> func;
+            REQUIRE(tasks.Pop(func));
+            func();
+
+            REQUIRE(callCount == 1);
+
+            REQUIRE(!tasks.Pop(func));
+        }
+
+        WHEN("Adding a 100 tasks and poping them")
+        {
+            auto callCount = 0;
+
+            for (auto i = 0; i < 100; ++i)
+                tasks.Add([&callCount]() { ++callCount; });
+
+            std::function<void()> func;
+            while (tasks.Pop(func))
+                func();
+
+            REQUIRE(callCount == 100);
+
+            REQUIRE(!tasks.Pop(func));
+        }
+
+        const auto cTestSize = 1000000;
+
+        WHEN("Adding a 1,000,000 tasks and poping them in different threads")
+        {
+            for (auto i = 0; i < 5; ++i)
+            {
+                auto callCount = 0;
+
+                auto start = std::chrono::high_resolution_clock::now();
+
+                std::thread([&callCount, &tasks, cTestSize]()
+                {
+                    for (auto i = 0; i < cTestSize; ++i)
+                        tasks.Add([&callCount]() { ++callCount; });
+                }).detach();
+
+                std::function<void()> func;
+                while (callCount < cTestSize)
+                {
+                    const auto hasFunc = tasks.Pop(func);
+                    if (hasFunc)
+                        func();
+                    else
+                        std::this_thread::yield();
+                }
+
+                auto end = std::chrono::high_resolution_clock::now();
+                //std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+
+                REQUIRE(callCount == cTestSize);
+                REQUIRE(!tasks.Pop(func));
+            }
+        }
+
+        WHEN("Adding a 1,000,000 tasks and draining them in different threads")
+        {
+            for (auto i = 0; i < 5; ++i)
+            {
+                auto callCount = 0;
+
+                auto start = std::chrono::high_resolution_clock::now();
+
+                std::thread([&callCount, &tasks, cTestSize]()
+                {
+                    for (auto i = 0; i < cTestSize; ++i)
+                        tasks.Add([&callCount]() { ++callCount; });
+                }).detach();
+
+                std::function<void()> func;
+                while (callCount < cTestSize)
+                {
+                    tasks.Drain();
+
+                    std::this_thread::yield();
+                }
+
+                auto end = std::chrono::high_resolution_clock::now();
+                //std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+
+                REQUIRE(callCount == cTestSize);
+                REQUIRE(!tasks.Pop(func));
+            }
+        }
+
+        WHEN("Adding a 1,000,000 tasks and poping them in different threads in batches")
+        {
+            for (auto i = 0; i < 5; ++i)
+            {
+                auto callCount = 0;
+
+                auto start = std::chrono::high_resolution_clock::now();
+
+                std::thread([&callCount, &tasks, cTestSize]()
+                {
+                    const auto batchSize = 1000;
+
+                    for (auto j = 0; j < cTestSize / batchSize; ++j)
+                    {
+                        std::scoped_lock lock(tasks.Lock());
+
+                        for (auto i = 0; i < batchSize; ++i)
+                            tasks.UnsafeAdd([&callCount]() { ++callCount; });
+                    }
+                }).detach();
+
+                std::function<void()> func;
+                while (callCount < cTestSize)
+                {
+                    tasks.Drain();
+
+                    std::this_thread::yield();
+                }
+
+                auto end = std::chrono::high_resolution_clock::now();
+                //std::cout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+
+                REQUIRE(callCount == cTestSize);
+                REQUIRE(!tasks.Pop(func));
+            }
+        }
     }
 }

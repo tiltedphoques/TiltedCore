@@ -7,6 +7,8 @@
 #include <list>
 #include <vector>
 #include <queue>
+#include <deque>
+#include <memory>
 
 template<class T>
 using Vector = std::vector<T, StlAllocator<T>>;
@@ -21,7 +23,10 @@ template<class T>
 using Set = std::unordered_set<T, std::hash<T>, std::equal_to<T>, StlAllocator<T>>;
 
 template<class T>
-using Queue = std::queue<T, StlAllocator<T>>;
+using Deque = std::deque<T, StlAllocator<T>>;
+
+template<class T>
+using Queue = std::queue<T, Deque<T>>;
 
 template<class T>
 using UniquePtr = std::unique_ptr<T, decltype(&Delete<T>)>;
