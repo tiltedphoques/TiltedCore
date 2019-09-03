@@ -9,6 +9,7 @@
 #include <queue>
 #include <deque>
 #include <memory>
+#include <string>
 
 template<class T>
 using Vector = std::vector<T, StlAllocator<T>>;
@@ -33,6 +34,9 @@ using UniquePtr = std::unique_ptr<T, decltype(&Delete<T>)>;
 
 template<class T>
 using SharedPtr = std::shared_ptr<T>;
+
+using String = std::basic_string<char, std::char_traits<char>, StlAllocator<char>>;
+using WString = std::basic_string<wchar_t, std::char_traits<wchar_t>, StlAllocator<wchar_t>>;
 
 template<typename T, typename... Args>
 auto MakeUnique(Args&& ... args)

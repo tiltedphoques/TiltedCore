@@ -486,6 +486,14 @@ TEST_CASE("Buffers", "[core.buffer]")
         }
     }
 
+    GIVEN("A scratch allocator")
+    {
+        ScratchAllocator allocator(1 << 16);
+        ScopedAllocator scopedAllocator(allocator);
+
+        New<Buffer>(512);
+    }
+
     REQUIRE(tracker.GetUsedMemory() == 0);
 }
 
