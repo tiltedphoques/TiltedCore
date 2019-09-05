@@ -16,7 +16,8 @@
 #include <future>
 #include <thread>
 #include <cstring>
-#include <iostream>
+
+using namespace TiltedPhoques;
 
 TEST_CASE("Outcome saves the result and errors", "[core.outcome]")
 {
@@ -491,7 +492,7 @@ TEST_CASE("Buffers", "[core.buffer]")
         ScratchAllocator allocator(1 << 16);
         ScopedAllocator scopedAllocator(allocator);
 
-        New<Buffer>(512);
+        REQUIRE(New<Buffer>(512) != nullptr);
     }
 
     REQUIRE(tracker.GetUsedMemory() == 0);

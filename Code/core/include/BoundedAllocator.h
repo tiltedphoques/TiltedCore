@@ -2,16 +2,20 @@
 
 #include "StandardAllocator.h"
 
-class BoundedAllocator : public StandardAllocator
+namespace TiltedPhoques
 {
-public:
+	struct BoundedAllocator : StandardAllocator
+	{
+		BoundedAllocator(size_t aMaximumAllocationSize) noexcept;
+		virtual ~BoundedAllocator() = default;
 
-    BoundedAllocator(size_t aMaximumAllocationSize);
+		TP_NOCOPYMOVE(BoundedAllocator);
 
-    void* Allocate(size_t aSize) override;
-    void Free(void* apData) override;
+		[[nodiscard]] void* Allocate(size_t aSize) noexcept override;
+		void Free(void* apData) noexcept override;
 
-private:
+	private:
 
-    size_t m_availableMemory;
-};
+		size_t m_availableMemory;
+	};
+}

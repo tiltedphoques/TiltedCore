@@ -2,11 +2,17 @@
 
 #include "Allocator.h"
 
-class StandardAllocator : public Allocator
+namespace TiltedPhoques
 {
-public:
+	struct StandardAllocator : Allocator
+	{
+		StandardAllocator() noexcept = default;
+		virtual ~StandardAllocator() = default;
 
-    void* Allocate(size_t aSize) override;
-    void Free(void* apData) override;
-    size_t Size(void* apData) override;
-};
+		TP_NOCOPYMOVE(StandardAllocator);
+
+		[[nodiscard]] void* Allocate(size_t aSize) noexcept override;
+		void Free(void* apData) noexcept override;
+		[[nodiscard]] size_t Size(void* apData) noexcept override;
+	};
+}

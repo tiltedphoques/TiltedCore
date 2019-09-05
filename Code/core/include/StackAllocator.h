@@ -3,59 +3,62 @@
 #include "Allocator.h"
 #include <memory>
 
-template <size_t Bytes>
-class StackAllocator : public Allocator
+namespace TiltedPhoques
 {
-public:
+	template <size_t Bytes>
+	struct StackAllocator : Allocator
+	{
+		StackAllocator() noexcept;
+		virtual ~StackAllocator();
 
-    StackAllocator();
-    virtual ~StackAllocator();
+		TP_NOCOPYMOVE(StackAllocator);
 
-    void* Allocate(size_t aSize) override;
-    void Free(void* apData) override;
-    size_t Size(void* apData) override;
+		[[nodiscard]] void* Allocate(size_t aSize) noexcept override;
+		void Free(void* apData) noexcept override;
+		[[nodiscard]] size_t Size(void* apData) noexcept override;
 
-private:
+	private:
 
-    size_t m_size;
-    void* m_pCursor;
-    char m_data[Bytes];
-};
+		size_t m_size;
+		void* m_pCursor;
+		char m_data[Bytes];
+	};
 
-template <size_t Bytes>
-StackAllocator<Bytes>::StackAllocator()
-    : m_size(Bytes)
-{
-    m_pCursor = static_cast<void*>(m_data);
-}
+	template <size_t Bytes>
+	StackAllocator<Bytes>::StackAllocator() noexcept
+		: m_size(Bytes)
+	{
+		m_pCursor = static_cast<void*>(m_data);
+	}
 
-template <size_t Bytes>
-StackAllocator<Bytes>::~StackAllocator() = default;
+	template <size_t Bytes>
+	StackAllocator<Bytes>::~StackAllocator() = default;
 
-template <size_t Bytes>
-void* StackAllocator<Bytes>::Allocate(const size_t aSize)
-{
-    if (std::align(alignof(std::max_align_t), aSize, m_pCursor, m_size))
-    {
-        auto pResult = m_pCursor;
-        m_pCursor = static_cast<char*>(m_pCursor) + aSize;
-        m_size -= aSize;
-        return pResult;
-    }
+	template <size_t Bytes>
+	void* StackAllocator<Bytes>::Allocate(const size_t aSize) noexcept
+	{
+		if (std::align(alignof(std::max_align_t), aSize, m_pCursor, m_size))
+		{
+			const auto pResult = m_pCursor;
+			m_pCursor = static_cast<char*>(m_pCursor) + aSize;
+			m_size -= aSize;
+			return pResult;
+		}
 
-    return nullptr;
-}
+		return nullptr;
+	}
 
-template <size_t Bytes>
-void StackAllocator<Bytes>::Free(void* apData)
-{
-    // do nothing here
-    (void)apData;
-}
+	template <size_t Bytes>
+	void StackAllocator<Bytes>::Free(void* apData) noexcept
+	{
+		// do nothing here
+		(void)apData;
+	}
 
-template <size_t Bytes>
-size_t StackAllocator<Bytes>::Size(void* apData)
-{
-    (void)apData;
-    return Bytes;
+	template <size_t Bytes>
+	size_t StackAllocator<Bytes>::Size(void* apData) noexcept
+	{
+		(void)apData;
+		return Bytes;
+	}
 }

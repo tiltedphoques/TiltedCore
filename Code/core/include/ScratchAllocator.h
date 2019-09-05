@@ -2,22 +2,25 @@
 
 #include "Allocator.h"
 
-class ScratchAllocator : public Allocator
+namespace TiltedPhoques
 {
-public:
+	struct ScratchAllocator : Allocator
+	{
+		explicit ScratchAllocator(size_t aSize) noexcept;
+		virtual ~ScratchAllocator();
 
-    ScratchAllocator(size_t aSize);
-    virtual ~ScratchAllocator();
+		TP_NOCOPYMOVE(ScratchAllocator);
 
-    void* Allocate(size_t aSize) override;
-    void Free(void* apData) override;
-    size_t Size(void* apData) override;
-    void Reset();
+		[[nodiscard]] void* Allocate(size_t aSize) noexcept override;
+		void Free(void* apData) noexcept override;
+		[[nodiscard]] size_t Size(void* apData) noexcept override;
+		void Reset() noexcept;
 
-private:
+	private:
 
-    size_t m_size;
-    size_t m_baseSize;
-    void* m_pData;
-    void* m_pBaseData;
-};
+		size_t m_size;
+		size_t m_baseSize;
+		void* m_pData;
+		void* m_pBaseData;
+	};
+}
