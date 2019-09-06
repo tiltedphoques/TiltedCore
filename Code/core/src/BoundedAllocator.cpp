@@ -1,4 +1,4 @@
-#include "BoundedAllocator.h"
+#include "BoundedAllocator.hpp"
 
 
 namespace TiltedPhoques

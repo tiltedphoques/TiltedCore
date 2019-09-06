@@ -1,5 +1,5 @@
-#include "Allocator.h"
-#include "StandardAllocator.h"
+#include "Allocator.hpp"
+#include "StandardAllocator.hpp"
 #include <cassert>
 
 namespace TiltedPhoques

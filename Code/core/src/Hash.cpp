@@ -1,4 +1,4 @@
-#include "Hash.h"
+#include "Hash.hpp"
 
 namespace TiltedPhoques
 {

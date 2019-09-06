@@ -1,5 +1,5 @@
-#include "ScratchAllocator.h"
-#include <Platform.h>
+#include "ScratchAllocator.hpp"
+#include <Platform.hpp>
 #include <memory>
 
 namespace TiltedPhoques

@@ -10,7 +10,7 @@ function CreateCoreProject(basePath)
 
         files
         {
-            basePath .. "/Code/core/include/**.h",
+            basePath .. "/Code/core/include/**.hpp",
             basePath .. "/Code/core/src/**.cpp",
         }
         

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "Allocator.h"
+#include "Allocator.hpp"
 
 namespace TiltedPhoques
 {

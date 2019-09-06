@@ -1,16 +1,16 @@
 #include "catch.hpp"
 
-#include "Buffer.h"
-#include "Outcome.h"
-#include "StandardAllocator.h"
-#include "BoundedAllocator.h"
-#include "ScratchAllocator.h"
-#include "StackAllocator.h"
-#include "TrackAllocator.h"
-#include "StlAllocator.h"
-#include "Hash.h"
-#include "Stl.h"
-#include "TaskQueue.h"
+#include "Buffer.hpp"
+#include "Outcome.hpp"
+#include "StandardAllocator.hpp"
+#include "BoundedAllocator.hpp"
+#include "ScratchAllocator.hpp"
+#include "StackAllocator.hpp"
+#include "TrackAllocator.hpp"
+#include "StlAllocator.hpp"
+#include "Hash.hpp"
+#include "Stl.hpp"
+#include "TaskQueue.hpp"
 
 #include <string>
 #include <future>

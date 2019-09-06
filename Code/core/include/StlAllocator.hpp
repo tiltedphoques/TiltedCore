@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Allocator.h"
+#include "Allocator.hpp"
 #include <new>
 
 namespace TiltedPhoques

@@ -1,4 +1,4 @@
-#include "Buffer.h"
+#include "Buffer.hpp"
 #include <algorithm>
 
 namespace TiltedPhoques

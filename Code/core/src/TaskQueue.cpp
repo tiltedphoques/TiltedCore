@@ -1,4 +1,4 @@
-#include "TaskQueue.h"
+#include "TaskQueue.hpp"
 
 namespace TiltedPhoques
 {
