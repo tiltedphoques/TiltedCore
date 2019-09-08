@@ -1,0 +1,19 @@
+steps:
+  - script: |
+      cd Build
+      ./MakeVS2019Projects.bat
+    displayName: Generate
+
+  - task: VSBuild@1
+    displayName: Building
+    inputs:
+      Configuration: Release
+      Platform: $(platform)
+
+  - script: |
+      SET real_platform="x64"
+      if "%platform%" == "Win32" SET real_platform="x32"
+
+      cd Build/lib/%real_platform%
+      Tests_r.exe
+    displayName: Test

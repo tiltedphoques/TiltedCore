@@ -1,0 +1,45 @@
+jobs:
+  - job: Linux_x32
+    displayName: Linux x32
+    pool:
+      vmImage: ubuntu-latest
+
+    variables:
+      platform: x32
+
+    steps:
+      - template: .ci/linux-build.yml
+        
+  - job: Linux_x64
+    displayName: Linux x64
+    pool:
+      vmImage: ubuntu-latest
+
+    variables:
+      platform: x64
+
+    steps:
+      - template: .ci/linux-build.yml
+
+  - job: Windows_x32
+    displayName: Windows x32
+    pool:
+      vmImage: windows-2019
+
+    variables:
+      platform: Win32
+    
+    steps:
+      - template: .ci/windows-build.yml
+
+  - job: Windows_x64
+    displayName: Windows x64
+    pool:
+      vmImage: windows-2019
+
+    variables:
+      platform: x64
+    
+    steps:
+      - template: .ci/windows-build.yml
+
