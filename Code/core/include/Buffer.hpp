@@ -22,6 +22,7 @@ namespace TiltedPhoques
 		Buffer& operator=(Buffer&& aBuffer) noexcept;
 
 		[[nodiscard]] size_t GetSize() const noexcept;
+        bool Resize(size_t aSize) noexcept;
 
 		[[nodiscard]] const uint8_t* GetData() const noexcept;
 		[[nodiscard]] uint8_t* GetWriteData() const noexcept;

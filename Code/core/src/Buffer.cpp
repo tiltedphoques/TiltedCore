@@ -77,7 +77,21 @@ namespace TiltedPhoques
 		return m_size;
 	}
 
-	const uint8_t* Buffer::GetData() const noexcept
+    bool Buffer::Resize(size_t aSize) noexcept
+    {
+        const auto pData = static_cast<uint8_t*>(GetAllocator()->Allocate(aSize));
+        if (!pData)
+            return false;
+        std::copy_n(m_pData, m_size, pData);
+
+        GetAllocator()->Free(m_pData);
+        m_pData = pData;
+        m_size = aSize;
+
+        return true;
+    }
+
+    const uint8_t* Buffer::GetData() const noexcept
 	{
 		return m_pData;
 	}
@@ -250,15 +264,19 @@ namespace TiltedPhoques
 		// Fix m_bitPosition to be at the start of the next full byte
 		m_bitPosition = (m_bitPosition & ~0x7) + ((m_bitPosition & 0x7) != 0 ? 8 : 0);
 
-		if (aCount + GetBytePosition() <= m_pBuffer->GetSize())
+		if (aCount + GetBytePosition() > m_pBuffer->GetSize())
 		{
-			std::copy(apSource, apSource + aCount, m_pBuffer->GetWriteData() + GetBytePosition());
+            const auto growth = aCount > 2048 ? aCount : 2048;
 
-			Advance(aCount);
+            m_pBuffer->Resize(m_pBuffer->GetSize() + growth);
 
-			return true;
+            return false;
 		}
 
-		return false;
+        std::copy(apSource, apSource + aCount, m_pBuffer->GetWriteData() + GetBytePosition());
+
+        Advance(aCount);
+
+        return true;
 	}
 }
