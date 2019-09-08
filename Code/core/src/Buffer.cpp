@@ -224,7 +224,10 @@ namespace TiltedPhoques
 
 		if (bytesToWrite + GetBytePosition() > m_pBuffer->GetSize())
 		{
-			return false;
+			const auto growth = bytesToWrite > 2048 ? bytesToWrite : 2048;
+
+			if (!m_pBuffer->Resize(m_pBuffer->GetSize() + growth))
+				return false;
 		}
 
 		auto* pLocation = m_pBuffer->GetWriteData() + GetBytePosition();
@@ -268,9 +271,8 @@ namespace TiltedPhoques
 		{
             const auto growth = aCount > 2048 ? aCount : 2048;
 
-            m_pBuffer->Resize(m_pBuffer->GetSize() + growth);
-
-            return false;
+            if(!m_pBuffer->Resize(m_pBuffer->GetSize() + growth))
+				return false;
 		}
 
         std::copy(apSource, apSource + aCount, m_pBuffer->GetWriteData() + GetBytePosition());

@@ -335,6 +335,27 @@ TEST_CASE("Buffers", "[core.buffer]")
         }
     }
 
+	GIVEN("A small buffer")
+    {
+		Buffer buffer(1);
+		WHEN("Writing too much data")
+		{
+			const uint64_t data = 0x123456789ABCDEFull;
+
+			REQUIRE(buffer.GetSize() == 1);
+
+			Buffer::Writer writer(&buffer);
+			REQUIRE(writer.WriteBytes((uint8_t*)& data, 8));
+			REQUIRE(buffer.GetSize() != 1);
+
+			uint64_t restoredData = 0;
+
+			Buffer::Reader reader(&buffer);
+			REQUIRE(reader.ReadBytes((uint8_t*)&restoredData, 8));
+			REQUIRE(data == restoredData);
+		}
+    }
+
     GIVEN("Views")
     {
         WHEN("Using a cursor")
