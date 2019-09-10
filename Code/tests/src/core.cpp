@@ -387,7 +387,7 @@ TEST_CASE("Buffers", "[core.buffer]")
 
             REQUIRE(cursor.Eof() == true);
         }
-        
+
         WHEN("Using a writer")
         {
             Buffer buffer(100);
@@ -405,7 +405,7 @@ TEST_CASE("Buffers", "[core.buffer]")
             REQUIRE(writer.GetBytePosition() == 1);
             REQUIRE(writer.Eof() == false);
 
-            
+
             writer.WriteBytes((uint8_t*)testData + 1, 4);
             REQUIRE(writer.GetBitPosition() == 40);
             REQUIRE(writer.GetBytePosition() == 5);
@@ -455,7 +455,7 @@ TEST_CASE("Buffers", "[core.buffer]")
                 REQUIRE(dest == test);
             }
 
-            
+
             {
                 uint64_t dest = 0;
 
@@ -476,7 +476,7 @@ TEST_CASE("Buffers", "[core.buffer]")
 
                 REQUIRE(dest == 0xCDE);
             }
-            
+
             writer.Reset();
             for (auto i = 0; i < 8; ++i)
             {
@@ -485,7 +485,7 @@ TEST_CASE("Buffers", "[core.buffer]")
             }
             writer.WriteBits(1, 3);
             writer.WriteBits(0x28FE, 16);
-            
+
             {
                 uint64_t dest = 0;
                 Buffer::Reader reader(&buffer);

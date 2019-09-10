@@ -4,62 +4,62 @@
 
 namespace TiltedPhoques
 {
-	thread_local Allocator* Allocator::s_allocatorStack[kMaxAllocatorCount];
-	thread_local int Allocator::s_currentAllocator{ -1 };
+    thread_local Allocator* Allocator::s_allocatorStack[kMaxAllocatorCount];
+    thread_local int Allocator::s_currentAllocator{ -1 };
 
-	void Allocator::Push(Allocator* apAllocator) noexcept
-	{
-		assert(s_currentAllocator + 1 < kMaxAllocatorCount);
+    void Allocator::Push(Allocator* apAllocator) noexcept
+    {
+        assert(s_currentAllocator + 1 < kMaxAllocatorCount);
 
-		s_currentAllocator++;
-		s_allocatorStack[s_currentAllocator] = apAllocator;
-	}
+        s_currentAllocator++;
+        s_allocatorStack[s_currentAllocator] = apAllocator;
+    }
 
-	void Allocator::Push(Allocator& aAllocator) noexcept
-	{
-		Push(&aAllocator);
-	}
+    void Allocator::Push(Allocator& aAllocator) noexcept
+    {
+        Push(&aAllocator);
+    }
 
-	Allocator* Allocator::Pop() noexcept
-	{
-		assert(s_currentAllocator >= 0);
+    Allocator* Allocator::Pop() noexcept
+    {
+        assert(s_currentAllocator >= 0);
 
-		const auto pAllocator = s_allocatorStack[s_currentAllocator];
-		s_currentAllocator--;
+        const auto pAllocator = s_allocatorStack[s_currentAllocator];
+        s_currentAllocator--;
 
-		return pAllocator;
-	}
+        return pAllocator;
+    }
 
-	Allocator* Allocator::Get() noexcept
-	{
-		if (s_currentAllocator >= 0)
-		{
-			return s_allocatorStack[s_currentAllocator];
-		}
+    Allocator* Allocator::Get() noexcept
+    {
+        if (s_currentAllocator >= 0)
+        {
+            return s_allocatorStack[s_currentAllocator];
+        }
 
-		return GetDefault();
-	}
+        return GetDefault();
+    }
 
-	Allocator* Allocator::GetDefault() noexcept
-	{
-		static StandardAllocator s_allocator;
-		return &s_allocator;
-	}
+    Allocator* Allocator::GetDefault() noexcept
+    {
+        static StandardAllocator s_allocator;
+        return &s_allocator;
+    }
 
-	ScopedAllocator::ScopedAllocator(Allocator* apAllocator) noexcept
-		: m_pAllocator(apAllocator)
-	{
-		Allocator::Push(m_pAllocator);
-	}
+    ScopedAllocator::ScopedAllocator(Allocator* apAllocator) noexcept
+        : m_pAllocator(apAllocator)
+    {
+        Allocator::Push(m_pAllocator);
+    }
 
-	ScopedAllocator::ScopedAllocator(Allocator& aAllocator) noexcept
-		: ScopedAllocator(&aAllocator)
-	{
-	}
+    ScopedAllocator::ScopedAllocator(Allocator& aAllocator) noexcept
+        : ScopedAllocator(&aAllocator)
+    {
+    }
 
-	ScopedAllocator::~ScopedAllocator() noexcept
-	{
-		Allocator::Pop();
-	}
+    ScopedAllocator::~ScopedAllocator() noexcept
+    {
+        Allocator::Pop();
+    }
 
 }
