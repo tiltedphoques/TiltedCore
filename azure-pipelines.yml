@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - template: .ci/linux-build.yml
-        
+
   - job: Linux_x64
     displayName: Linux x64
     pool:
@@ -28,7 +28,7 @@ jobs:
 
     variables:
       platform: Win32
-    
+
     steps:
       - template: .ci/windows-build.yml
 
@@ -39,7 +39,6 @@ jobs:
 
     variables:
       platform: x64
-    
+
     steps:
       - template: .ci/windows-build.yml
-
