@@ -57,11 +57,9 @@ namespace std
 {
     template<> struct hash<TiltedPhoques::String>
     {
-        typedef TiltedPhoques::String argument_type;
-        typedef std::size_t result_type;
-        result_type operator()(argument_type const& s) const noexcept
+        std::size_t operator()(const TiltedPhoques::String& aString) const noexcept
         {
-            return std::hash<std::string>{}(s.data());
+            return std::hash<std::string>{}(aString.data());
         }
     };
 }
