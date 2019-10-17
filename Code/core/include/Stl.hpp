@@ -52,3 +52,14 @@ namespace TiltedPhoques
         return std::allocate_shared<T>(StlAllocator<T>(), std::forward<Args>(args)...);
     }
 }
+
+namespace std
+{
+    template<> struct hash<TiltedPhoques::String>
+    {
+        std::size_t operator()(const TiltedPhoques::String& aString) const noexcept
+        {
+            return std::hash<std::string>{}(aString.data());
+        }
+    };
+}
