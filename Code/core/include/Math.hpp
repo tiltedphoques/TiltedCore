@@ -17,6 +17,6 @@ namespace TiltedPhoques
     template<class T>
     [[nodiscard]] T Lerp(const T& a, const T& b, float delta) noexcept
     {
-        return a + delta * (b - a);
+        return a + (b - a) * delta;
     }
 }
