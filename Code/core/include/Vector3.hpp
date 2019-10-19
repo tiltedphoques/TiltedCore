@@ -95,6 +95,13 @@ namespace TiltedPhoques
             return *this / Length();
         }
 
+        void Decompose(T& aX, T& aY, T& aZ) const noexcept
+        {
+            aX = m_x;
+            aY = m_y;
+            aZ = m_z;
+        }
+
     private:
 
         T m_x;
