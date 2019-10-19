@@ -17,7 +17,7 @@ namespace TiltedPhoques
     {
         const float halfCircle = useRadians ? float(Pi) : 180.f;
 
-        if (std::fabsf(from - to) >= halfCircle)
+        if (fabs(from - to) >= halfCircle)
         {
             if (from < to)
             {
