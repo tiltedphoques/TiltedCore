@@ -5,7 +5,7 @@ namespace TiltedPhoques
 {
     float Sigmoid(float x, float lambda, float k) noexcept
     {
-        return 1.f / (1.f + std::expf(-x * lambda + k));
+        return 1.f / (1.f + expf(-x * lambda + k));
     }
 
     float SmoothStep(float delta) noexcept
@@ -23,15 +23,11 @@ namespace TiltedPhoques
             {
                 return to - (from + halfCircle * 2);
             }
-            else
-            {
-                return (to + halfCircle * 2) - from;
-            }
+
+            return (to + halfCircle * 2) - from;
         }
-        else
-        {
-            return to - from;
-        }
+
+        return to - from;
     }
 
     float Mod(float aValue, float aMax) noexcept
