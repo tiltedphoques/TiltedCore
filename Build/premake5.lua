@@ -80,4 +80,4 @@ workspace ("Tilted Core")
             }
 
     group ("Libraries")
-        CreateCoreProject("..")
+        premake.extensions.core.generate()
