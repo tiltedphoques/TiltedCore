@@ -11,6 +11,7 @@ steps:
   - task: VSBuild@1
     displayName: Building
     inputs:
+      solution: 'Build/projects/Tilted Core.sln'
       Configuration: Release
       Platform: $(platform)
 

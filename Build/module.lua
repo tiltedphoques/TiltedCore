@@ -43,7 +43,7 @@ function mimalloc_generate()
 
     project ("mimalloc")
         kind ("StaticLib")
-        language ("C")
+        language ("C++")
 
         includedirs
         {
@@ -54,6 +54,7 @@ function mimalloc_generate()
         {
             premake.extensions.core.path .. "/ThirdParty/mimalloc/include/**.h",
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc.c",
+            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-posix.c",
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-aligned.c",
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/heap.c",
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/init.c",
@@ -62,9 +63,13 @@ function mimalloc_generate()
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/os.c",
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/page.c",
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/segment.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/static.c",
             premake.extensions.core.path .. "/ThirdParty/mimalloc/src/stats.c",
         }
+
+        filter { "files:**.c" }
+            compileas "C++"
+
+        filter {}
 
     premake.extensions.core.mimalloc_generated = true
 end

@@ -76,7 +76,8 @@ workspace ("Tilted Core")
 
             links
             {
-                "Core"
+                "Core",
+                "mimalloc"
             }
 
     group ("Libraries")
