@@ -1,4 +1,8 @@
 steps:
+  - checkout: self
+    lfs: boolean
+    submodules: recursive
+
   - script: |
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test
       sudo apt-get update

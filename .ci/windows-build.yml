@@ -1,4 +1,8 @@
 steps:
+  - checkout: self
+    lfs: boolean
+    submodules: recursive
+
   - script: |
       cd Build
       ./MakeVS2019Projects.bat
