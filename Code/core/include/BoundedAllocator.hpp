@@ -1,10 +1,10 @@
 #pragma once
 
-#include "StandardAllocator.hpp"
+#include "MimallocAllocator.hpp"
 
 namespace TiltedPhoques
 {
-    struct BoundedAllocator : StandardAllocator
+    struct BoundedAllocator : MimallocAllocator
     {
         BoundedAllocator(size_t aMaximumAllocationSize) noexcept;
         virtual ~BoundedAllocator() = default;

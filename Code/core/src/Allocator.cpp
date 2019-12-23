@@ -1,5 +1,5 @@
 #include "Allocator.hpp"
-#include "StandardAllocator.hpp"
+#include "MimallocAllocator.hpp"
 #include <cassert>
 
 namespace TiltedPhoques
@@ -42,7 +42,7 @@ namespace TiltedPhoques
 
     Allocator* Allocator::GetDefault() noexcept
     {
-        static StandardAllocator s_allocator;
+        static MimallocAllocator s_allocator;
         return &s_allocator;
     }
 

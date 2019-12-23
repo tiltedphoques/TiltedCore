@@ -12,7 +12,7 @@ namespace TiltedPhoques
         if (m_availableMemory >= aSize)
         {
             m_availableMemory -= aSize;
-            return StandardAllocator::Allocate(aSize);
+            return MimallocAllocator::Allocate(aSize);
         }
 
         return nullptr;
@@ -22,6 +22,6 @@ namespace TiltedPhoques
     {
         m_availableMemory += Size(apData);
 
-        StandardAllocator::Free(apData);
+        MimallocAllocator::Free(apData);
     }
 }
