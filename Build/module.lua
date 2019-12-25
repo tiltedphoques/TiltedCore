@@ -12,26 +12,27 @@ function core_generate()
         return
     end
 
-    project ("Core")
-        kind ("StaticLib")
-        language ("C++")
+    group "Libraries"
+        project ("Core")
+            kind ("StaticLib")
+            language ("C++")
 
-        includedirs
-        {
-            premake.extensions.core.path .. "/Code/core/include/",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/include/",
-        }
+            includedirs
+            {
+                premake.extensions.core.path .. "/Code/core/include/",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/include/",
+            }
 
-        files
-        {
-            premake.extensions.core.path .. "/Code/core/include/**.hpp",
-            premake.extensions.core.path .. "/Code/core/src/**.cpp",
-        }
+            files
+            {
+                premake.extensions.core.path .. "/Code/core/include/**.hpp",
+                premake.extensions.core.path .. "/Code/core/src/**.cpp",
+            }
 
-        links
-        {
-            "mimalloc"
-        }
+            links
+            {
+                "mimalloc"
+            }
 
     premake.extensions.core.core_generated = true
 end
@@ -41,35 +42,36 @@ function mimalloc_generate()
         return
     end
 
-    project ("mimalloc")
-        kind ("StaticLib")
-        language ("C++")
+    group "ThirdParty"
+        project ("mimalloc")
+            kind ("StaticLib")
+            language ("C++")
 
-        includedirs
-        {
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/include/",
-        }
+            includedirs
+            {
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/include/",
+            }
 
-        files
-        {
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/include/**.h",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-posix.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-aligned.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/heap.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/init.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/memory.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/options.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/os.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/page.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/segment.c",
-            premake.extensions.core.path .. "/ThirdParty/mimalloc/src/stats.c",
-        }
+            files
+            {
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/include/**.h",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-posix.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-aligned.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/heap.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/init.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/memory.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/options.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/os.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/page.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/segment.c",
+                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/stats.c",
+            }
 
-        filter { "files:**.c" }
-            compileas "C++"
+            filter { "files:**.c" }
+                compileas "C++"
 
-        filter {}
+            filter {}
 
     premake.extensions.core.mimalloc_generated = true
 end
