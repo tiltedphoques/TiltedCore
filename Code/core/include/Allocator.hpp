@@ -71,8 +71,8 @@ namespace TiltedPhoques
         static void Push(Allocator* apAllocator) noexcept;
         static void Push(Allocator& aAllocator) noexcept;
         static Allocator* Pop() noexcept;
-        static Allocator* Get() noexcept;
-        static Allocator* GetDefault() noexcept;
+        [[nodiscard]] static Allocator* Get() noexcept;
+        [[nodiscard]] static Allocator* GetDefault() noexcept;
     };
 
     struct AllocatorCompatible

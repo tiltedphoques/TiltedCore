@@ -15,7 +15,7 @@ namespace TiltedPhoques
         void Free(void* apData) noexcept override;
         [[nodiscard]] size_t Size(void* apData) noexcept override;
 
-        static void* AlignedAllocate(size_t aSize, size_t aAlignment) noexcept;
+        [[nodiscard]] static void* AlignedAllocate(size_t aSize, size_t aAlignment) noexcept;
         static void AlignedFree(void* apData) noexcept;
     };
 }

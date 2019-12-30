@@ -35,7 +35,7 @@ namespace TiltedPhoques
             return pAllocator;
         }
 
-        Allocator* Get() noexcept
+        [[nodiscard]] Allocator* Get() noexcept
         {
             return m_stack[m_index];
         }

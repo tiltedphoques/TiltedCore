@@ -5,10 +5,8 @@
 
 namespace TiltedPhoques
 {
-    class Buffer : public AllocatorCompatible
+    struct Buffer : AllocatorCompatible
     {
-    public:
-
         Buffer() noexcept;
         explicit Buffer(size_t aSize) noexcept;
         Buffer(const Buffer& acBuffer) noexcept;
