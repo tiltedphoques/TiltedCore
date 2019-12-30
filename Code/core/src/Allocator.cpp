@@ -4,15 +4,53 @@
 
 namespace TiltedPhoques
 {
-    thread_local Allocator* Allocator::s_allocatorStack[kMaxAllocatorCount];
-    thread_local int Allocator::s_currentAllocator{ -1 };
+    struct AllocatorStack
+    {
+        enum
+        {
+            kMaxAllocatorCount = 1024
+        };
+
+        AllocatorStack() noexcept
+            : m_index(0)
+        {
+            m_stack[0] = Allocator::GetDefault();
+        }
+
+        void Push(Allocator* apAllocator) noexcept
+        {
+            assert(m_index + 1 < kMaxAllocatorCount);
+
+            m_index++;
+            m_stack[m_index] = apAllocator;
+        }
+
+        Allocator* Pop() noexcept
+        {
+            assert(m_index > 0);
+
+            const auto pAllocator = m_stack[m_index];
+            m_index--;
+
+            return pAllocator;
+        }
+
+        Allocator* Get() noexcept
+        {
+            return m_stack[m_index];
+        }
+
+    private:
+
+        uint32_t m_index;
+        Allocator* m_stack[kMaxAllocatorCount];
+    };
+
+    static thread_local AllocatorStack s_stack;
 
     void Allocator::Push(Allocator* apAllocator) noexcept
     {
-        assert(s_currentAllocator + 1 < kMaxAllocatorCount);
-
-        s_currentAllocator++;
-        s_allocatorStack[s_currentAllocator] = apAllocator;
+        s_stack.Push(apAllocator);
     }
 
     void Allocator::Push(Allocator& aAllocator) noexcept
@@ -22,22 +60,12 @@ namespace TiltedPhoques
 
     Allocator* Allocator::Pop() noexcept
     {
-        assert(s_currentAllocator >= 0);
-
-        const auto pAllocator = s_allocatorStack[s_currentAllocator];
-        s_currentAllocator--;
-
-        return pAllocator;
+        return s_stack.Pop();
     }
 
     Allocator* Allocator::Get() noexcept
     {
-        if (s_currentAllocator >= 0)
-        {
-            return s_allocatorStack[s_currentAllocator];
-        }
-
-        return GetDefault();
+        return s_stack.Get();
     }
 
     Allocator* Allocator::GetDefault() noexcept

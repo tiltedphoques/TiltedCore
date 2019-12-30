@@ -23,10 +23,8 @@ namespace TiltedPhoques
         constexpr bool has_allocator = is_detected_v<has_get_allocator_t, T>&& is_detected_v<has_set_allocator_t, T>;
     }
 
-    class Allocator
+    struct Allocator
     {
-    public:
-
         virtual ~Allocator() = default;
         [[nodiscard]] virtual void* Allocate(size_t aSize) noexcept  = 0;
         virtual void Free(void* apData) noexcept  = 0;
@@ -75,16 +73,6 @@ namespace TiltedPhoques
         static Allocator* Pop() noexcept;
         static Allocator* Get() noexcept;
         static Allocator* GetDefault() noexcept;
-
-    private:
-
-        enum
-        {
-            kMaxAllocatorCount = 1024
-        };
-
-        static thread_local Allocator* s_allocatorStack[kMaxAllocatorCount];
-        static thread_local int s_currentAllocator;
     };
 
     struct AllocatorCompatible
