@@ -102,8 +102,6 @@ namespace TiltedPhoques
             aZ = m_z;
         }
 
-    private:
-
         T m_x;
         T m_y;
         T m_z;
