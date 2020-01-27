@@ -40,17 +40,22 @@ namespace TiltedPhoques
             return m_stack[m_index];
         }
 
+        [[nodiscard]] static AllocatorStack& Instance() noexcept
+        {
+            static thread_local AllocatorStack s_stack;
+            return s_stack;
+        }
+
     private:
 
         uint32_t m_index;
-        Allocator* m_stack[kMaxAllocatorCount];
+        Allocator* m_stack[kMaxAllocatorCount]{};
     };
 
-    static thread_local AllocatorStack s_stack;
 
     void Allocator::Push(Allocator* apAllocator) noexcept
     {
-        s_stack.Push(apAllocator);
+        AllocatorStack::Instance().Push(apAllocator);
     }
 
     void Allocator::Push(Allocator& aAllocator) noexcept
@@ -60,12 +65,12 @@ namespace TiltedPhoques
 
     Allocator* Allocator::Pop() noexcept
     {
-        return s_stack.Pop();
+        return AllocatorStack::Instance().Pop();
     }
 
     Allocator* Allocator::Get() noexcept
     {
-        return s_stack.Get();
+        return AllocatorStack::Instance().Get();
     }
 
     Allocator* Allocator::GetDefault() noexcept
