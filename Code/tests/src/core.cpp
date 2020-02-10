@@ -11,6 +11,7 @@
 #include "Hash.hpp"
 #include "Stl.hpp"
 #include "TaskQueue.hpp"
+#include "Initializer.hpp"
 
 #include <string>
 #include <future>
@@ -665,4 +666,23 @@ TEST_CASE("Task Queue")
             }
         }
     }
+}
+
+bool globalInited = false;
+
+Initializer globalInit([]()
+{
+    globalInited = true;
+});
+
+TEST_CASE("Intializer")
+{
+    bool inited = false;
+    Initializer init([&inited]()
+    {
+        inited = true;
+    });
+
+    REQUIRE(inited);
+    REQUIRE(globalInited);
 }
