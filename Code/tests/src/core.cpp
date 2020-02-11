@@ -679,6 +679,5 @@ TEST_CASE("Intializer")
 {
     Initializer::RunAll();
 
-    REQUIRE(inited);
     REQUIRE(globalInited);
 }
