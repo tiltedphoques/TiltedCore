@@ -677,11 +677,7 @@ Initializer globalInit([]()
 
 TEST_CASE("Intializer")
 {
-    bool inited = false;
-    Initializer init([&inited]()
-    {
-        inited = true;
-    });
+    Initializer::RunAll();
 
     REQUIRE(inited);
     REQUIRE(globalInited);
