@@ -55,19 +55,6 @@ function mimalloc_generate()
             files
             {
                 premake.extensions.core.path .. "/ThirdParty/mimalloc/include/**.h",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-posix.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/alloc-aligned.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/heap.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/init.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/options.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/os.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/page.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/segment.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/stats.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/arena.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/bitmap.inc.c",
-                premake.extensions.core.path .. "/ThirdParty/mimalloc/src/region.c",
                 premake.extensions.core.path .. "/ThirdParty/mimalloc/src/static.c",
             }
 
