@@ -4,65 +4,69 @@
 
 namespace TiltedPhoques
 {
-    class Initializer {
-    public:
-        using callback_t = void (*)();
+    struct Initializer
+    {
+        using TCallback = void (*)();
 
     private:
-        Initializer* next_{ nullptr };
-        callback_t callback_{ nullptr };
+        Initializer* m_pNext{ nullptr };
+        TCallback m_callback{ nullptr };
 
-        Initializer(Initializer*& parent, callback_t callback) noexcept;
+        Initializer(Initializer*& parent, TCallback callback) noexcept;
 
     public:
-        Initializer(callback_t callback) noexcept;
-        Initializer(Initializer& parent, callback_t callback) noexcept;
+        Initializer(TCallback aCallback) noexcept;
+        Initializer(Initializer& aParent, TCallback aCallback) noexcept;
 
-        Initializer(const Initializer&) = delete;
-        Initializer(Initializer&&) = delete;
+        TP_NOCOPYMOVE(Initializer);
 
-        static Initializer*& ROOT() noexcept;
+        static Initializer*& GetHead() noexcept;
 
         static std::size_t RunAll();
     };
 
-    inline Initializer::Initializer(Initializer*& parent,
-        callback_t callback) noexcept
-        : next_(parent),
-        callback_(callback) {
-        parent = this;
+    inline Initializer::Initializer(Initializer*& aParent, TCallback aCallback) noexcept
+        : m_pNext(aParent)
+        , m_callback(aCallback) 
+    {
+        aParent = this;
     }
 
-    inline Initializer::Initializer(callback_t callback) noexcept
-        : Initializer(ROOT(), callback) {}
+    inline Initializer::Initializer(TCallback aCallback) noexcept
+        : Initializer(GetHead(), aCallback)
+    {}
 
-    inline Initializer::Initializer(Initializer& parent,
-        callback_t callback) noexcept
-        : Initializer(parent.next_, callback) {}
+    inline Initializer::Initializer(Initializer& aParent, TCallback aCallback) noexcept
+        : Initializer(aParent.m_pNext, aCallback)
+    {}
 
-    inline Initializer*& Initializer::ROOT() noexcept {
+    inline Initializer*& Initializer::GetHead() noexcept
+    {
         static Initializer* root{ nullptr };
 
         return root;
     }
 
-    inline std::size_t Initializer::RunAll() {
+    inline std::size_t Initializer::RunAll() 
+    {
         std::size_t total = 0;
 
-        for (Initializer* i = ROOT(); i;) {
-            if (i->callback_) {
-                i->callback_();
-                i->callback_ = nullptr;
+        for (Initializer* i = GetHead(); i;)
+        {
+            if (i->m_callback)
+            {
+                i->m_callback();
+                i->m_callback = nullptr;
 
                 ++total;
             }
 
-            Initializer* j = i->next_;
-            i->next_ = nullptr;
+            Initializer* j = i->m_pNext;
+            i->m_pNext = nullptr;
             i = j;
         }
 
-        ROOT() = nullptr;
+        GetHead() = nullptr;
 
         return total;
     }
