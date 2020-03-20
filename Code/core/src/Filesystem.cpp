@@ -1,8 +1,12 @@
-#include "Filesystem.hpp"
+#include <Filesystem.hpp>
+#include <Platform.hpp>
+
 
 #include <fstream>
 
 #if TP_PLATFORM_WINDOWS
+#include <windows.h>
+
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #endif
 
