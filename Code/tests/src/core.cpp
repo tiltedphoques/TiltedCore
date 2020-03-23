@@ -12,6 +12,7 @@
 #include "Stl.hpp"
 #include "TaskQueue.hpp"
 #include "Initializer.hpp"
+#include "Serialization.hpp"
 
 #include <string>
 #include <future>
@@ -666,6 +667,36 @@ TEST_CASE("Task Queue")
             }
         }
     }
+}
+
+TEST_CASE("Serialization")
+{
+    Buffer buffer(100);
+
+    Buffer::Writer writer(&buffer);
+    Buffer::Reader reader(&buffer);
+
+    Serialization::WriteBool(writer, true);
+    Serialization::WriteBool(writer, false);
+
+    REQUIRE(Serialization::ReadBool(reader) == true);
+    REQUIRE(Serialization::ReadBool(reader) == false);
+
+    Serialization::WriteVarInt(writer, 0);
+    Serialization::WriteVarInt(writer, 123456789ull);
+
+    REQUIRE(Serialization::ReadVarInt(reader) == 0);
+    REQUIRE(Serialization::ReadVarInt(reader) == 123456789ull);
+
+    Serialization::WriteDouble(writer, 0.f);
+    Serialization::WriteDouble(writer, -45.f);
+
+    REQUIRE(Serialization::ReadDouble(reader) == 0.f);
+    REQUIRE(Serialization::ReadDouble(reader) == -45.f);
+
+    Serialization::WriteString(writer, "hello !");
+
+    REQUIRE(Serialization::ReadString(reader) == "hello !");
 }
 
 bool globalInited = false;
