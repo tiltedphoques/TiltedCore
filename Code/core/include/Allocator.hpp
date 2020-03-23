@@ -45,7 +45,7 @@ namespace TiltedPhoques
         }
 
         template<class T, class... Args>
-        [[nodiscard]] T* New(Args... args) noexcept
+        [[nodiscard]] T* New(Args&&... args) noexcept
         {
             static_assert(alignof(T) <= alignof(details::default_align_t));
 
@@ -103,7 +103,7 @@ namespace TiltedPhoques
     }
 
     template<class T, class... Args>
-    [[nodiscard]] T* New(Args... args) noexcept
+    [[nodiscard]] T* New(Args&&... args) noexcept
     {
         if constexpr (details::has_allocator<T>)
             return Allocator::Get()->New<T>(std::forward<Args>(args)...);
