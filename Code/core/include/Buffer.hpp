@@ -9,6 +9,7 @@ namespace TiltedPhoques
     {
         Buffer() noexcept;
         explicit Buffer(size_t aSize) noexcept;
+        explicit Buffer(const uint8_t* apData, size_t aSize) noexcept;
         Buffer(const Buffer& acBuffer) noexcept;
         Buffer(Buffer&& aBuffer) noexcept;
         virtual ~Buffer();

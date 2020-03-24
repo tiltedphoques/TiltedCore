@@ -18,6 +18,16 @@ namespace TiltedPhoques
             m_pData = static_cast<uint8_t*>(GetAllocator()->Allocate(m_size));
     }
 
+    Buffer::Buffer(const uint8_t* apData, size_t aSize) noexcept
+        : m_pData(nullptr)
+        , m_size(aSize)
+    {
+        if (m_size > 0)
+            m_pData = static_cast<uint8_t*>(GetAllocator()->Allocate(m_size));
+
+        std::copy(apData, apData + aSize, m_pData);
+    }
+
     Buffer::Buffer(const Buffer& acBuffer) noexcept
         : Buffer(acBuffer.m_size)
     {
