@@ -53,6 +53,8 @@ namespace TiltedPhoques
     {
         aSeed ^= std::hash<T>()(aValue) + 0x9e3779b9 + (aSeed << 6) + (aSeed >> 2);
     }
+
+    template<class T> struct AlwaysFalse : std::false_type {};
 }
 
 #define TP_NOCOPYMOVE(className) \
