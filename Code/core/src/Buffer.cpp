@@ -48,7 +48,8 @@ namespace TiltedPhoques
 
     Buffer::~Buffer()
     {
-        GetAllocator()->Free(m_pData);
+        if(m_pData)
+            GetAllocator()->Free(m_pData);
     }
 
     uint8_t Buffer::operator[](const size_t aIndex) const noexcept

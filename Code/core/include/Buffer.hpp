@@ -60,7 +60,7 @@ namespace TiltedPhoques
             bool WriteBytes(const uint8_t* apSource, size_t aCount);
         };
 
-    private:
+    protected:
 
         uint8_t* m_pData;
         size_t m_size;
