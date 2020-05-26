@@ -194,7 +194,9 @@ namespace TiltedPhoques
         std::copy(pLocation, pLocation + bytesToRead, reinterpret_cast<uint8_t*>(&aDestination));
         aDestination <<= bitsToRead;
         aDestination |= endBits;
-        aDestination &= ((uint64_t(1) << aCount) - 1);
+
+        if (aCount < 64)
+            aDestination &= ((uint64_t(1) << aCount) - 1);
 
         m_bitPosition += aCount;
 
