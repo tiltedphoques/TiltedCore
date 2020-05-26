@@ -683,6 +683,12 @@ TEST_CASE("Serialization")
     REQUIRE(Serialization::ReadBool(reader) == false);
 
     Serialization::WriteVarInt(writer, 0);
+    Serialization::WriteVarInt(writer, 0x1399);
+
+    REQUIRE(Serialization::ReadVarInt(reader) == 0);
+    REQUIRE(Serialization::ReadVarInt(reader) == 0x1399);
+
+    Serialization::WriteVarInt(writer, 0);
     Serialization::WriteVarInt(writer, 123456789ull);
 
     REQUIRE(Serialization::ReadVarInt(reader) == 0);
