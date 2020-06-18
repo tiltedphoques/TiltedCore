@@ -2,22 +2,22 @@
 
 namespace TiltedPhoques
 {
-    std::string Serialization::ReadString(Buffer::Reader& aReader)
+    String Serialization::ReadString(Buffer::Reader& aReader)
     {
-        std::string result;
-        uint16_t len = 0;
+        String result;
 
-        aReader.ReadBytes(reinterpret_cast<uint8_t*>(&len), sizeof(len));
+        const uint16_t len = ReadVarInt(aReader) & 0xFFFF;
         result.resize(len);
         aReader.ReadBytes(reinterpret_cast<uint8_t*>(result.data()), len);
 
         return result;
     }
 
-    void Serialization::WriteString(Buffer::Writer& aWriter, const std::string& acString)
+    void Serialization::WriteString(Buffer::Writer& aWriter, const String& acString)
     {
         const uint16_t len = acString.size() & 0xFFFF;
-        aWriter.WriteBytes(reinterpret_cast<const uint8_t*>(&len), sizeof(len));
+
+        WriteVarInt(aWriter, len);
         aWriter.WriteBytes(reinterpret_cast<const uint8_t*>(acString.data()), len);
     }
 

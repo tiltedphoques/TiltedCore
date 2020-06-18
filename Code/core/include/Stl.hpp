@@ -40,6 +40,14 @@ namespace TiltedPhoques
     using String = std::basic_string<char, std::char_traits<char>, StlAllocator<char>>;
     using WString = std::basic_string<wchar_t, std::char_traits<wchar_t>, StlAllocator<wchar_t>>;
 
+    template <class T, class U>
+    auto CastUnique(UniquePtr<U> aPtr)
+    {
+        auto pPtr = aPtr.release();
+
+        return UniquePtr<T>(reinterpret_cast<T*>(pPtr), &Delete<T>);
+    }
+
     template<typename T, typename... Args>
     auto MakeUnique(Args&& ... args)
     {
