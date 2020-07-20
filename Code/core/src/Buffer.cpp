@@ -152,6 +152,13 @@ namespace TiltedPhoques
         return m_bitPosition / 8;
     }
 
+    size_t Buffer::Cursor::Size() const noexcept
+    {
+        auto bitPosition = (m_bitPosition & ~0x7) + ((m_bitPosition & 0x7) != 0 ? 8 : 0);
+
+        return bitPosition / 8;
+    }
+
     Buffer::Reader::Reader(Buffer* apBuffer)
         : Cursor(apBuffer)
     {

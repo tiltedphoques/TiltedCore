@@ -35,10 +35,12 @@ namespace TiltedPhoques
             void Advance(size_t aByteCount);
             void Reverse(size_t aByteCount);
 
-            [[nodiscard]] size_t GetBytePosition() const;
-            [[nodiscard]] size_t GetBitPosition() const;
+            [[nodiscard]] size_t Size() const noexcept;
 
         protected:
+
+            [[nodiscard]] size_t GetBytePosition() const;
+            [[nodiscard]] size_t GetBitPosition() const;
 
             size_t m_bitPosition;
             Buffer* m_pBuffer;
