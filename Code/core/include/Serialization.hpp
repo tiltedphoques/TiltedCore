@@ -18,5 +18,8 @@ namespace TiltedPhoques
 
         static double ReadDouble(Buffer::Reader& aReader);
         static void WriteDouble(Buffer::Writer& aWriter, double aValue);
+
+        static float ReadFloat(Buffer::Reader& aReader);
+        static void WriteFloat(Buffer::Writer& aWriter, float aValue);
     };
 }

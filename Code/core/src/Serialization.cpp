@@ -78,4 +78,17 @@ namespace TiltedPhoques
     {
         aWriter.WriteBytes(reinterpret_cast<const uint8_t*>(&aValue), sizeof(aValue));
     }
+
+    float Serialization::ReadFloat(Buffer::Reader& aReader)
+    {
+        float value = 0;
+        aReader.ReadBytes(reinterpret_cast<uint8_t*>(&value), sizeof(value));
+
+        return value;
+    }
+
+    void Serialization::WriteFloat(Buffer::Writer& aWriter, float aValue)
+    {
+        aWriter.WriteBytes(reinterpret_cast<const uint8_t*>(&aValue), sizeof(aValue));
+    }
 }
