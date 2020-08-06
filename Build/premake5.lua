@@ -18,7 +18,7 @@ workspace ("Tilted Core")
     vectorextensions "SSE2"
     warnings "Extra"
 
-    cppdialect "C++17"
+    cppdialect "C++20"
 
     platforms { "x32", "x64" }
 
