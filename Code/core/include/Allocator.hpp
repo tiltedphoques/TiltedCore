@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Meta.hpp"
+#include <cstdint>
 
 #define TP_ALLOCATOR                                                                    \
     void SetAllocator(Allocator* apAllocator) noexcept { m_pAllocator = apAllocator; }  \
