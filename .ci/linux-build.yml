@@ -23,6 +23,7 @@ steps:
     displayName: Install
 
   - script: |
+      source ~/.xmake/profile
       xmake -y
     displayName: Build
 
