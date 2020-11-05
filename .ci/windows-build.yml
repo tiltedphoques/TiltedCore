@@ -11,7 +11,7 @@ steps:
       targetType: inline
       script: |
         Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
-        xmake.exe
+        xmake.exe -y
 
   - script: |
       cd build/windows/x64/release
