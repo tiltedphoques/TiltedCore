@@ -4,10 +4,10 @@ steps:
     submodules: recursive
 
   - task: PowerShell@2
+    env:
+      CI: 1
     inputs:
       targetType: inline
-      env:
-        CI: 1
       script: |
         Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
 
