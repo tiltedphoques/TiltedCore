@@ -4,16 +4,14 @@ steps:
     submodules: recursive
 
   - task: PowerShell@2
+    displayName: Build
     env:
       CI: 1
     inputs:
       targetType: inline
       script: |
         Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
-
-  - script: |
-      xmake
-    displayName: Build
+        xmake.exe
 
   - script: |
       cd build/windows/x64/release
