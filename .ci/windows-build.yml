@@ -4,8 +4,9 @@ steps:
     submodules: recursive
 
   - task: PowerShell@2
-    script: |
-      Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
+    inputs:
+      script: |
+        Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
 
   - script: |
       xmake
