@@ -5,6 +5,7 @@ steps:
 
   - task: PowerShell@2
     inputs:
+      targetType: inline
       script: |
         Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
 
