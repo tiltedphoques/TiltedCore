@@ -3,22 +3,15 @@ steps:
     lfs: boolean
     submodules: recursive
 
-  - script: |
-      cd Build
-      ./MakeVS2019Projects.bat
-    displayName: Generate
-
-  - task: VSBuild@1
-    displayName: Building
-    inputs:
-      solution: 'Build/projects/Tilted Core.sln'
-      Configuration: Release
-      Platform: $(platform)
+  - task: PowerShell@2
+    script: |
+      Invoke-Expression (Invoke-Webrequest 'https://xmake.io/psget.text' -UseBasicParsing).Content
 
   - script: |
-      SET real_platform="x64"
-      if "%platform%" == "Win32" SET real_platform="x32"
+      xmake
+    displayName: Build
 
-      cd Build/lib/%real_platform%
-      Tests_r.exe
+  - script: |
+      cd build/windows/x64/release
+      Tests.exe
     displayName: Test
