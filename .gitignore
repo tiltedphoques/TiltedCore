@@ -4,5 +4,5 @@ build/
 *__pycache__*
 
 .xmake
-
+.vscode
 vs20*

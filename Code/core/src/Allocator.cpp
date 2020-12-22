@@ -94,5 +94,4 @@ namespace TiltedPhoques
     {
         Allocator::Pop();
     }
-
 }

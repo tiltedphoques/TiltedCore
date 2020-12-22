@@ -5,7 +5,7 @@ jobs:
       vmImage: ubuntu-latest
 
     variables:
-      platform: x32
+      platform: x86_32
 
     steps:
       - template: .ci/linux-build.yml
@@ -16,7 +16,7 @@ jobs:
       vmImage: ubuntu-latest
 
     variables:
-      platform: x64
+      platform: x86_64
 
     steps:
       - template: .ci/linux-build.yml
@@ -27,7 +27,7 @@ jobs:
       vmImage: windows-2019
 
     variables:
-      platform: Win32
+      platform: x32
 
     steps:
       - template: .ci/windows-build.yml
