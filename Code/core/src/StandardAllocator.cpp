@@ -1,7 +1,11 @@
 #include "StandardAllocator.hpp"
 
 #include <cstdlib>
+#ifndef __APPLE__
+#include <malloc/malloc.h>
+#else
 #include <malloc.h>
+#endif
 
 namespace TiltedPhoques
 {
@@ -23,6 +27,8 @@ namespace TiltedPhoques
         return _msize(apData);
 #elif __linux__
         return malloc_usable_size(apData);
+#elif __APPLE__
+        return malloc_size(apData);
 #else
         static_assert(false, "Not implemented");
         return 0;

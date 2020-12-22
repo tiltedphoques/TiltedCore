@@ -6,7 +6,7 @@ target("TiltedCore")
     set_kind("static")
     add_files("Code/core/src/*.cpp")
     add_includedirs("Code/core/include/", {public = true})
-    add_headerfiles("Core/core/include/*.hpp", {prefixdir = "TiltedCore"})
+    add_headerfiles("Code/core/include/*.hpp", {prefixdir = "TiltedCore"})
     add_packages("mimalloc")
 
 target("Tests")
