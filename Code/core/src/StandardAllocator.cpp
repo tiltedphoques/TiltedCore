@@ -1,7 +1,7 @@
 #include "StandardAllocator.hpp"
 
 #include <cstdlib>
-#ifndef __APPLE__
+#ifdef __APPLE__
 #include <malloc/malloc.h>
 #else
 #include <malloc.h>
