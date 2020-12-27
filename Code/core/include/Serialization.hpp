@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Buffer.hpp>
-#include <Stl.hpp>
+#include "Buffer.hpp"
+#include "Stl.hpp"
 
 namespace TiltedPhoques
 {

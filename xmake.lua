@@ -1,6 +1,7 @@
 set_languages("cxx17")
 
-add_requires("mimalloc", "catch2")
+add_requires("mimalloc", {config = {rltgenrandom = true }})
+add_requires("catch2")
 
 target("TiltedCore")
     set_kind("static")
