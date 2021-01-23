@@ -191,11 +191,11 @@ namespace TiltedPhoques
     {
         if constexpr (details::has_allocator<std::remove_all_extents_t<T>>)
         {
-            apEntry->GetAllocator()->Delete<T>(apEntry);
+            apEntry->GetAllocator()->template Delete<T>(apEntry);
         }
         else
         {
-            Allocator::GetDefault()->Delete<T>(apEntry);
+            Allocator::GetDefault()->template Delete<T>(apEntry);
         }
     }
 }
