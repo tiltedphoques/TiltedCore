@@ -31,6 +31,8 @@ namespace TiltedPhoques
         virtual void Free(void* apData) noexcept  = 0;
         [[nodiscard]] virtual size_t Size(void* apData) noexcept = 0;
 
+        using TArraySizePrefix = size_t;
+
         template<class T>
         [[nodiscard]] T* New() noexcept
         {
@@ -45,7 +47,28 @@ namespace TiltedPhoques
             return nullptr;
         }
 
-        template<class T, class... Args>
+        template<class T, std::enable_if_t<std::is_array_v<T>>* = nullptr>
+        [[nodiscard]] auto New(TArraySizePrefix aCount) noexcept
+        {
+            using TUnderlyingType = std::remove_all_extents_t<T>;
+
+            static_assert(alignof(T) <= alignof(details::default_align_t));
+
+            const auto pData = static_cast<uint8_t*>(Allocate(sizeof(TUnderlyingType) * aCount + sizeof(TArraySizePrefix)));
+            *reinterpret_cast<TArraySizePrefix*>(pData) = aCount;
+
+            auto pArray = reinterpret_cast<TUnderlyingType*>(pData + sizeof(TArraySizePrefix));
+
+            if (pData)
+            {
+                for (auto i = 0; i < aCount; ++i)
+                    new (&pArray[i]) TUnderlyingType();
+            }
+
+            return pArray;
+        }
+
+        template<class T, std::enable_if_t<!std::is_array_v<T>>* = nullptr, class... Args>
         [[nodiscard]] T* New(Args&&... args) noexcept
         {
             static_assert(alignof(T) <= alignof(details::default_align_t));
@@ -59,7 +82,28 @@ namespace TiltedPhoques
             return nullptr;
         }
 
-        template<class T>
+        template<class T, std::enable_if_t<std::is_array_v<T>>* = nullptr, class... Args>
+        [[nodiscard]] auto New(TArraySizePrefix aCount, Args&&... args) noexcept
+        {
+            using TUnderlyingType = std::remove_all_extents_t<T>;
+
+            static_assert(alignof(T) <= alignof(details::default_align_t));
+
+            const auto pData = static_cast<uint8_t*>(Allocate(sizeof(TUnderlyingType) * aCount + sizeof(TArraySizePrefix)));
+            *reinterpret_cast<TArraySizePrefix*>(pData) = aCount;
+
+            auto pArray = reinterpret_cast<TUnderlyingType*>(pData + sizeof(TArraySizePrefix));
+
+            if (pData)
+            {
+                for(auto i = 0; i < aCount; ++i)
+                    new (&pArray[i]) TUnderlyingType(std::forward<Args>(args)...);
+            }
+
+            return pArray;
+        }
+
+        template<class T, std::enable_if_t<!std::is_array_v<T>>* = nullptr>
         void Delete(T* apData) noexcept
         {
             if (apData == nullptr)
@@ -67,6 +111,23 @@ namespace TiltedPhoques
 
             apData->~T();
             Free(apData);
+        }
+
+        template<class T, std::enable_if_t<std::is_array_v<T>>* = nullptr>
+        void Delete(T apData) noexcept
+        {
+            if (apData == nullptr)
+                return;
+
+            using TUnderlyingType = std::remove_all_extents_t<T>;
+
+            auto* pSize = reinterpret_cast<TArraySizePrefix*>(reinterpret_cast<uint8_t*>(apData) - 8);
+            for(auto i = 0ull; i < *pSize; ++i)
+            {
+                apData[i].~TUnderlyingType();
+            }
+
+            Free(pSize);
         }
 
         static void Push(Allocator* apAllocator) noexcept;
@@ -95,24 +156,24 @@ namespace TiltedPhoques
     };
 
     template<class T>
-    [[nodiscard]] T* New() noexcept
+    [[nodiscard]] auto New() noexcept
     {
-        if constexpr (details::has_allocator<T>)
+        if constexpr (details::has_allocator<std::remove_all_extents_t<T>>)
             return Allocator::Get()->New<T>();
         else
             return Allocator::GetDefault()->New<T>();
     }
 
     template<class T, class... Args>
-    [[nodiscard]] T* New(Args&&... args) noexcept
+    [[nodiscard]] auto New(Args&&... args) noexcept
     {
-        if constexpr (details::has_allocator<T>)
+        if constexpr (details::has_allocator<std::remove_all_extents_t<T>>)
             return Allocator::Get()->New<T>(std::forward<Args>(args)...);
         else
             return Allocator::GetDefault()->New<T>(std::forward<Args>(args)...);
     }
 
-    template<class T>
+    template<class T, std::enable_if_t<!std::is_array_v<T>>* = nullptr>
     void Delete(T* apEntry) noexcept
     {
         if constexpr (details::has_allocator<T>)
@@ -122,6 +183,19 @@ namespace TiltedPhoques
         else
         {
             Allocator::GetDefault()->Delete(apEntry);
+        }
+    }
+
+    template<class T, std::enable_if_t<std::is_array_v<T>>* = nullptr>
+    void Delete(T apEntry) noexcept
+    {
+        if constexpr (details::has_allocator<std::remove_all_extents_t<T>>)
+        {
+            apEntry->GetAllocator()->Delete<T>(apEntry);
+        }
+        else
+        {
+            Allocator::GetDefault()->Delete<T>(apEntry);
         }
     }
 }

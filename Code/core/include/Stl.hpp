@@ -13,6 +13,19 @@
 
 namespace TiltedPhoques
 {
+namespace details
+{
+    template<class T>
+    struct UniqueDeleter
+    {
+        void operator()(std::conditional_t<std::is_array_v<T>, T, T*> apData)
+        {
+            TiltedPhoques::Delete<T>(apData);
+        }
+    };
+}
+    
+
     template<class T>
     using Vector = std::vector<T, StlAllocator<T>>;
 
@@ -32,7 +45,7 @@ namespace TiltedPhoques
     using Queue = std::queue<T, Deque<T>>;
 
     template<class T>
-    using UniquePtr = std::unique_ptr<T, decltype(&Delete<T>)>;
+    using UniquePtr = std::unique_ptr<T, details::UniqueDeleter<T>>;
 
     template<class T>
     using SharedPtr = std::shared_ptr<T>;
@@ -45,13 +58,13 @@ namespace TiltedPhoques
     {
         auto pPtr = aPtr.release();
 
-        return UniquePtr<T>(reinterpret_cast<T*>(pPtr), &Delete<T>);
+        return UniquePtr<T>(reinterpret_cast<T*>(pPtr));
     }
 
     template<typename T, typename... Args>
     auto MakeUnique(Args&& ... args)
     {
-        return UniquePtr<T>(New<T>(std::forward<Args>(args)...), &Delete<T>);
+        return UniquePtr<T>(New<T>(std::forward<Args>(args)...));
     }
 
     template<typename T, typename... Args>

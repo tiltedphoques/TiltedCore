@@ -137,6 +137,23 @@ TEST_CASE("Allocators allocate memory", "[core.allocators]")
             allocator.Free(pData);
         }
     }
+
+    GIVEN("A default allocator")
+    {
+        WHEN("Allocating an array")
+        {
+            auto* pArray = New<uint8_t[]>(10);
+            pArray[0] = 4;
+
+            Delete<uint8_t[]>(pArray);
+        }
+
+        WHEN("Creating a UniquePtr containing an array")
+        {
+            UniquePtr<uint8_t[]> pArr = MakeUnique<uint8_t[]>(10, 2);
+            REQUIRE(pArr[0] == 2);
+        }
+    }
 }
 
 TEST_CASE("Making sure allocator stacks work corrently", "[core.allocator.stack]")
