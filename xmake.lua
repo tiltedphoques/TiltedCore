@@ -1,6 +1,8 @@
 set_languages("cxx17")
 
-add_requires("mimalloc", {config = {rltgenrandom = true }})
+set_xmakever("2.5.1")
+
+add_requires("mimalloc", "hopscotch-map", {configs = {rltgenrandom = true }})
 add_requires("catch2")
 
 add_rules("mode.debug","mode.releasedbg", "mode.release")
@@ -19,11 +21,11 @@ target("TiltedCore")
     add_files("Code/core/src/*.cpp")
     add_includedirs("Code/core/include/", {public = true})
     add_headerfiles("Code/core/include/*.hpp", {prefixdir = "TiltedCore"})
-    add_packages("mimalloc")
+    add_packages("mimalloc", "hopscotch-map")
 
 target("Tests")
     set_kind("binary")
     add_files("Code/tests/src/*.cpp")
     add_deps("TiltedCore")
-    add_packages("TiltedCore", "catch2")
+    add_packages("TiltedCore", "catch2", "hopscotch-map")
     add_cxflags("-fPIC")

@@ -156,6 +156,17 @@ TEST_CASE("Allocators allocate memory", "[core.allocators]")
     }
 }
 
+TEST_CASE("Containers")
+{
+    GIVEN("A hopscotch container")
+    {
+        Map<uint32_t, String> someMap;
+        someMap[10] = "Test";
+
+        REQUIRE(someMap[10] == "Test");
+    }
+}
+
 TEST_CASE("Making sure allocator stacks work corrently", "[core.allocator.stack]")
 {
     GIVEN("No allocator has been pushed")

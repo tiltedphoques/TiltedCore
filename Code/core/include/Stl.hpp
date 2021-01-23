@@ -2,8 +2,8 @@
 
 #include "StlAllocator.hpp"
 
-#include <unordered_set>
-#include <unordered_map>
+#include <tsl/hopscotch_map.h>
+#include <tsl/hopscotch_set.h>
 #include <list>
 #include <vector>
 #include <queue>
@@ -24,7 +24,6 @@ namespace details
         }
     };
 }
-    
 
     template<class T>
     using Vector = std::vector<T, StlAllocator<T>>;
@@ -33,10 +32,10 @@ namespace details
     using List = std::list<T, StlAllocator<T>>;
 
     template<class T, class U>
-    using Map = std::unordered_map<T, U, std::hash<T>, std::equal_to<T>, StlAllocator<std::pair<const T, U>>>;
+    using Map = tsl::hopscotch_map<T, U, std::hash<T>, std::equal_to<T>, StlAllocator<std::pair<T, U>>>;
 
     template<class T>
-    using Set = std::unordered_set<T, std::hash<T>, std::equal_to<T>, StlAllocator<T>>;
+    using Set = tsl::hopscotch_set<T, std::hash<T>, std::equal_to<T>, StlAllocator<T>>;
 
     template<class T>
     using Deque = std::deque<T, StlAllocator<T>>;
@@ -80,7 +79,7 @@ namespace std
     {
         std::size_t operator()(const TiltedPhoques::String& aString) const noexcept
         {
-            return std::hash<std::string>{}(aString.data());
+            return std::hash<std::string>{}(aString.c_str());
         }
     };
 }
