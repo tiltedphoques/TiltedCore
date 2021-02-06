@@ -47,6 +47,4 @@ jobs:
 
     # Run tests
     - name: Tests
-      run: |
-        cd build/windows/${{ matrix.arch }}/${{ matrix.mode }}
-        Tests.exe
+      run: build/windows/${{ matrix.arch }}/${{ matrix.mode }}/Tests.exe
