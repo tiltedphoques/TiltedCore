@@ -121,7 +121,7 @@ namespace TiltedPhoques
 
             using TUnderlyingType = std::remove_all_extents_t<T>;
 
-            auto* pSize = reinterpret_cast<TArraySizePrefix*>(reinterpret_cast<uint8_t*>(apData) - 8);
+            auto* pSize = reinterpret_cast<TArraySizePrefix*>(reinterpret_cast<uint8_t*>(apData) - sizeof(TArraySizePrefix));
             for(auto i = 0ull; i < *pSize; ++i)
             {
                 apData[i].~TUnderlyingType();
