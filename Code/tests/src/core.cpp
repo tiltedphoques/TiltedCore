@@ -13,6 +13,7 @@
 #include "TaskQueue.hpp"
 #include "Initializer.hpp"
 #include "Serialization.hpp"
+#include "Lockable.hpp"
 
 #include <string>
 #include <future>
@@ -164,6 +165,30 @@ TEST_CASE("Containers")
         someMap[10] = "Test";
 
         REQUIRE(someMap[10] == "Test");
+    }
+}
+
+TEST_CASE("Lockable")
+{
+    GIVEN("A lockable")
+    {
+        Lockable<String> test("test");
+        auto ref = test.AsRef();
+
+        {
+            auto locked = test.Lock();
+            String& data = locked;
+
+            REQUIRE(data == "test");
+        }
+
+        {
+            auto locked = ref.Lock();
+            String& data = locked;
+            data = "toto";
+
+            REQUIRE(data == "toto");
+        }
     }
 }
 
