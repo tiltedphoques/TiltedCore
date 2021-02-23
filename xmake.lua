@@ -2,8 +2,8 @@ set_languages("cxx17")
 
 set_xmakever("2.5.1")
 
-add_requires("mimalloc", "hopscotch-map", {configs = {rltgenrandom = true }})
-add_requires("catch2")
+add_requires("mimalloc", "hopscotch-map", "catch2")
+add_requireconfs("mimalloc", {configs = {rltgenrandom = true}})
 
 add_rules("mode.debug","mode.releasedbg", "mode.release")
 add_rules("plugin.vsxmake.autoupdate")
