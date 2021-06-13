@@ -1,76 +1,21 @@
 #include "Allocator.hpp"
 #include "MimallocAllocator.hpp"
-#include <cassert>
 
 namespace TiltedPhoques
 {
-    struct AllocatorStack
+    static thread_local Allocator* s_pCurrentAllocator = nullptr;
+
+    void Allocator::Set(Allocator* apAllocator) noexcept
     {
-        enum
-        {
-            kMaxAllocatorCount = 1024
-        };
-
-        AllocatorStack() noexcept
-            : m_index(0)
-        {
-            m_stack[0] = Allocator::GetDefault();
-        }
-
-        void Push(Allocator* apAllocator) noexcept
-        {
-            assert(m_index + 1 < kMaxAllocatorCount);
-
-            m_index++;
-            m_stack[m_index] = apAllocator;
-        }
-
-        Allocator* Pop() noexcept
-        {
-            assert(m_index > 0);
-
-            const auto pAllocator = m_stack[m_index];
-            m_index--;
-
-            return pAllocator;
-        }
-
-        [[nodiscard]] Allocator* Get() noexcept
-        {
-            return m_stack[m_index];
-        }
-
-        [[nodiscard]] static AllocatorStack& Instance() noexcept
-        {
-            static thread_local AllocatorStack s_stack;
-            return s_stack;
-        }
-
-    private:
-
-        uint32_t m_index;
-        Allocator* m_stack[kMaxAllocatorCount]{};
-    };
-
-
-    void Allocator::Push(Allocator* apAllocator) noexcept
-    {
-        AllocatorStack::Instance().Push(apAllocator);
-    }
-
-    void Allocator::Push(Allocator& aAllocator) noexcept
-    {
-        Push(&aAllocator);
-    }
-
-    Allocator* Allocator::Pop() noexcept
-    {
-        return AllocatorStack::Instance().Pop();
+        s_pCurrentAllocator = apAllocator;
     }
 
     Allocator* Allocator::Get() noexcept
     {
-        return AllocatorStack::Instance().Get();
+        if (s_pCurrentAllocator)
+            return s_pCurrentAllocator;
+
+        return GetDefault();
     }
 
     Allocator* Allocator::GetDefault() noexcept
@@ -80,9 +25,9 @@ namespace TiltedPhoques
     }
 
     ScopedAllocator::ScopedAllocator(Allocator* apAllocator) noexcept
-        : m_pAllocator(apAllocator)
+        : m_pOldAllocator(Allocator::Get())
     {
-        Allocator::Push(m_pAllocator);
+        Allocator::Set(apAllocator);
     }
 
     ScopedAllocator::ScopedAllocator(Allocator& aAllocator) noexcept
@@ -92,6 +37,6 @@ namespace TiltedPhoques
 
     ScopedAllocator::~ScopedAllocator() noexcept
     {
-        Allocator::Pop();
+        Allocator::Set(m_pOldAllocator);
     }
 }

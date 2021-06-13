@@ -130,9 +130,7 @@ namespace TiltedPhoques
             Free(pSize);
         }
 
-        static void Push(Allocator* apAllocator) noexcept;
-        static void Push(Allocator& aAllocator) noexcept;
-        static Allocator* Pop() noexcept;
+        static void Set(Allocator* apAllocator = nullptr) noexcept;
         [[nodiscard]] static Allocator* Get() noexcept;
         [[nodiscard]] static Allocator* GetDefault() noexcept;
     };
@@ -152,7 +150,7 @@ namespace TiltedPhoques
         TP_NOCOPYMOVE(ScopedAllocator);
 
     private:
-        Allocator* m_pAllocator;
+        Allocator* m_pOldAllocator;
     };
 
     template<class T>

@@ -19,6 +19,7 @@
 #include <future>
 #include <thread>
 #include <cstring>
+#include <iostream>
 
 using namespace TiltedPhoques;
 
@@ -205,12 +206,12 @@ TEST_CASE("Making sure allocator stacks work corrently", "[core.allocator.stack]
         {
             BoundedAllocator allocator(1000);
 
-            Allocator::Push(&allocator);
+            Allocator::Set(&allocator);
 
             REQUIRE(Allocator::Get() == &allocator);
             auto futureResult = std::async(std::launch::async, []() { return Allocator::Get(); });
             REQUIRE(futureResult.get() != &allocator);
-            REQUIRE(Allocator::Pop() == &allocator);
+            Allocator::Set(nullptr);
             REQUIRE(Allocator::Get() != &allocator);
         }
 
@@ -760,4 +761,59 @@ TEST_CASE("Intializer")
     Initializer::RunAll();
 
     REQUIRE(globalInited);
+}
+
+TEST_CASE("Vector benchmark")
+{
+    WHEN("Not using an allocator")
+    {
+        auto now = std::chrono::high_resolution_clock::now();
+        for (auto j = 0; j < 10; ++j)
+        {
+            std::vector<uint64_t> vec;
+            for (auto i = 0; i < 100000; ++i)
+            {
+                vec.push_back(i * 4 + (i / 3));
+
+            }
+        }
+        const auto stdElapsed = std::chrono::high_resolution_clock::now() - now;
+
+        now = std::chrono::high_resolution_clock::now();
+        for (auto j = 0; j < 10; ++j)
+        {
+            Vector<uint64_t> vec;
+            for (auto i = 0; i < 100000; ++i)
+            {
+                vec.push_back(i * 4 + (i / 3));
+
+            }
+        }
+        const auto tpElapsed = std::chrono::high_resolution_clock::now() - now;
+
+        now = std::chrono::high_resolution_clock::now();
+        {
+            ScratchAllocator s_allocator(100000 * 6 * 8);
+
+            for (auto j = 0; j < 10; ++j)
+            {
+                ScopedAllocator _(s_allocator);
+
+                Vector<uint64_t> vec;
+                for (auto i = 0; i < 100000; ++i)
+                {
+                    vec.push_back(i * 4 + (i / 3));
+                }
+
+                s_allocator.Reset();
+            }
+
+
+        }
+        const auto tpScratchElapsed = std::chrono::high_resolution_clock::now() - now;
+
+        std::cout << "Std: " << stdElapsed.count() << std::endl;
+        std::cout << "Tp : " << tpElapsed.count() << std::endl;
+        std::cout << "Tps: " << tpScratchElapsed.count() << std::endl;
+    }
 }
