@@ -10,6 +10,7 @@
 #include <deque>
 #include <memory>
 #include <string>
+#include <map>
 
 namespace TiltedPhoques
 {
@@ -33,6 +34,9 @@ namespace details
 
     template<class T, class U>
     using Map = tsl::hopscotch_map<T, U, std::hash<T>, std::equal_to<T>, StlAllocator<std::pair<T, U>>>;
+
+    template<class T, class U>
+    using SortedMap = std::map<T, U, std::less<T>, StlAllocator<std::pair<const T, U>>>;
 
     template<class T>
     using Set = tsl::hopscotch_set<T, std::hash<T>, std::equal_to<T>, StlAllocator<T>>;
