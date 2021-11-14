@@ -22,7 +22,7 @@ namespace TiltedPhoques
 
         static Initializer*& GetHead() noexcept;
 
-        static std::size_t RunAll();
+        static size_t RunAll();
     };
 
     inline Initializer::Initializer(Initializer*& aParent, TCallback aCallback) noexcept
@@ -47,9 +47,9 @@ namespace TiltedPhoques
         return root;
     }
 
-    inline std::size_t Initializer::RunAll() 
+    inline size_t Initializer::RunAll() 
     {
-        std::size_t total = 0;
+        size_t total = 0;
 
         for (Initializer* i = GetHead(); i;)
         {
