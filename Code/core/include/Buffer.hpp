@@ -39,6 +39,9 @@ namespace TiltedPhoques
             [[nodiscard]] size_t GetBytePosition() const;
             [[nodiscard]] size_t GetBitPosition() const;
 
+            [[nodiscard]] Buffer* GetBuffer() const noexcept;
+            [[nodiscard]] uint8_t* GetDataAtPosition() const noexcept;
+
         protected:
 
             size_t m_bitPosition;

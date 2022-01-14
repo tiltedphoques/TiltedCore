@@ -159,6 +159,16 @@ namespace TiltedPhoques
         return bitPosition / 8;
     }
 
+    Buffer* Buffer::Cursor::GetBuffer() const noexcept
+    {
+        return m_pBuffer;
+    }
+
+    uint8_t* Buffer::Cursor::GetDataAtPosition() const noexcept
+    {
+        return m_pBuffer->GetWriteData() + GetBytePosition();
+    }
+
     Buffer::Reader::Reader(Buffer* apBuffer)
         : Cursor(apBuffer)
     {
