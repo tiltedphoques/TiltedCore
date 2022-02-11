@@ -40,4 +40,14 @@ namespace TiltedPhoques
         return content;
     }
 
+    bool SaveFile(const std::filesystem::path& acPath, const String& acData) noexcept
+    {
+        std::ofstream out(acPath, std::ios::binary);
+        if (!out.is_open())
+            return false;
+
+        out.write(acData.data(), acData.size());
+
+        return true;
+    }
 }

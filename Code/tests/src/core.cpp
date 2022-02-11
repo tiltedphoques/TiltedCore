@@ -21,6 +21,8 @@
 #include <cstring>
 #include <iostream>
 
+#include "Filesystem.hpp"
+
 using namespace TiltedPhoques;
 
 TEST_CASE("Outcome saves the result and errors", "[core.outcome]")
@@ -815,5 +817,21 @@ TEST_CASE("Vector benchmark")
         std::cout << "Std: " << stdElapsed.count() << std::endl;
         std::cout << "Tp : " << tpElapsed.count() << std::endl;
         std::cout << "Tps: " << tpScratchElapsed.count() << std::endl;
+    }
+}
+
+TEST_CASE("Filesystem")
+{
+    const String cData = "Hello There!\nGeneral Kenobi!";
+    const auto cPath = std::filesystem::current_path() / "test_file.txt";
+
+    WHEN("Saving a file")
+    {
+        REQUIRE(SaveFile(cPath, cData));
+
+        THEN("Loading it")
+        {
+            REQUIRE(LoadFile(cPath).size() == cData.size());
+        }
     }
 }
