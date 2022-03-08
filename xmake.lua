@@ -13,6 +13,9 @@ if is_mode("release") then
     set_optimize("fastest")
 end
 
+option("cxx_allocator_override")
+    add_defines("TPCORE_CXX_ALLOCATOR_OVERRIDE")
+
 target("TiltedCore")
     set_kind("static")
     add_files("Code/core/src/*.cpp")
