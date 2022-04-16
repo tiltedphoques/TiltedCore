@@ -8,12 +8,12 @@ namespace TiltedPhoques
 {
     inline void* TPAlloc(const size_t acSize)
     {
-        return TiltedPhoques::Allocator::Get()->Allocate(acSize);
+        return TiltedPhoques::Allocator::GetDefault()->Allocate(acSize);
     }
 
     inline void TPFree(void* apBlock)
     {
-        TiltedPhoques::Allocator::Get()->Free(apBlock);
+        TiltedPhoques::Allocator::GetDefault()->Free(apBlock);
     }
 }
 
