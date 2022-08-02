@@ -2,7 +2,7 @@ set_languages("cxx17")
 
 set_xmakever("2.5.1")
 
-add_requires("mimalloc", "hopscotch-map", "catch2")
+add_requires("mimalloc", "hopscotch-map", "catch2 2.13.9")
 add_requireconfs("mimalloc", {configs = {rltgenrandom = true}})
 
 add_rules("mode.debug","mode.releasedbg", "mode.release")
