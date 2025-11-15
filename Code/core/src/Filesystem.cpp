@@ -14,17 +14,23 @@ namespace TiltedPhoques
 {
     std::filesystem::path GetPath() noexcept
     {
-#if TP_PLATFORM_WINDOWS
-        WCHAR dllPath[MAX_PATH] = { 0 };
-        GetModuleFileNameW(reinterpret_cast<HINSTANCE>(&__ImageBase), dllPath, std::size(dllPath));
+        static std::once_flag bInitialized;
+        static std::filesystem::path currentPath;
 
-        std::error_code ec;
-        const auto currentPath = std::filesystem::path(dllPath).parent_path();
+        std::call_once(bInitialized, []
+        {
+#if TP_PLATFORM_WINDOWS
+            WCHAR dllPath[MAX_PATH] = { 0 };
+            GetModuleFileNameW(nullptr, dllPath, std::size(dllPath));
+
+            std::error_code ec;
+            currentPath = std::filesystem::path(dllPath).parent_path();
+#else
+            currentPath = std::filesystem::current_path();
+#endif
+        });
 
         return currentPath;
-#else
-        return std::filesystem::current_path();
-#endif
     }
 
     String LoadFile(const std::filesystem::path& acPath) noexcept
