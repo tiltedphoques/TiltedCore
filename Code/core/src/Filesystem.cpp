@@ -3,6 +3,7 @@
 
 
 #include <fstream>
+#include <mutex>
 
 #if TP_PLATFORM_WINDOWS
 #include <windows.h>
